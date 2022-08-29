@@ -1,0 +1,20 @@
+.auth-page {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 200px;
+
+  .form-box {
+    width: 500px;
+    &__header {
+      h2 {
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+.user-payment {
+  display: flex;
+  justify-content: center;
+
+  .user-payment-info {
+    padding: 20px;
+    border: 1px solid #efefef;
+    border-radius: 4px;
+  }
+  
+  table {
+    min-width: 400px;
+    font-size: 18px;
+    tr {
+      td:first-child {
+        font-weight: bold;
+      }
+      td.special {
+        color: red;
+        font-weight: bold;
+      }
+    }
+  }
+}

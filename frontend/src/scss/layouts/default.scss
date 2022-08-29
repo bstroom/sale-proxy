@@ -1,0 +1,46 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  .main {
+    flex: 1;
+  }
+}
+
+header {
+  padding: 1rem 24px;
+  .header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    a {
+      font-weight: 500;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      
+      nav {
+        margin-right: 20px;
+      }
+      
+      .login {
+        padding-right: 10px;
+        position: relative;
+        &:after {
+          content: "";
+          display: block;
+          width: 1px;
+          height: 16px;
+          background: #ccc;
+          position: absolute;
+          right: 4px;
+          top: 50%;
+          transform: translateY(-40%) rotate(15deg);
+        }
+      }
+    }
+  }
+}

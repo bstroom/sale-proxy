@@ -1,0 +1,18 @@
+.form-bottom {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.flex-center {
+  @include flex-center;
+}
+.text-center {
+  text-align: center;
+}
+.demo {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

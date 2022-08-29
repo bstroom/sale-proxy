@@ -1,0 +1,32 @@
+.user-dashboard {
+  
+}
+
+.budget {
+  border: 1px solid #efefef;
+  border-radius: 4px;
+  padding: 1rem;
+  .card-box {
+    .amount {
+      font-size: 30px;
+      font-weight: bold;
+      color: green;
+    }
+  }
+}
+
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+.plan-description {
+  color: #333;
+  .price {
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
