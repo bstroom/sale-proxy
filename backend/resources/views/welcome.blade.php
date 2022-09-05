@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="{{asset('build/logo192.png')}}" />
     <link rel="manifest" href="{{asset('build/manifest.json')}}" />
     <title>Proxy Quốc tế</title>
-    <script defer="defer" src="{{asset('build/static/js/main.143ff600.js')}}"></script>
+    <script defer="defer" src="{{asset('build/static/js/main.62315e69.js')}}"></script>
     <link href="{{asset('build/static/css/main.9a0c1401.css')}}" rel="stylesheet">
 </head>
 <body><noscript>You need to enable JavaScript to run this app.</noscript>
