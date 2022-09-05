@@ -33,11 +33,15 @@ const UserDashboard = () => {
         }, () => {
             dispatch(getBudgetAction());
             message.success('Mua thành công!')
+            setIsModalVisible(false);
+            setCurrentPlan(null);
+            setLocal('ALL');
         }, () => {
             message.error('Mua không thành công, xin hãy liên hệ quản lý');
+            setIsModalVisible(false);
+            setCurrentPlan(null);
+            setLocal('ALL');
         }));
-        setCurrentPlan(null);
-        setLocal('ALL');
     }
     
     const showModal = (plan) => {
@@ -46,7 +50,6 @@ const UserDashboard = () => {
     };
     
     const handleOk = () => {
-        setIsModalVisible(false);
         onBuyPlan(currentPlan);
     };
 
