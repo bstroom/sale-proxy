@@ -1,7 +1,7 @@
 import {Modal, Button, Card, message, Skeleton, Switch, Tag, Select} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {getListPlanAction} from "../../../store/actions/planActions";
+import {getUserPlansAction} from "../../../store/actions/planActions";
 import {usePromiseTracker} from "react-promise-tracker";
 import {currencyFormat} from "../../../common/helpers";
 import {PLAN_TYPES} from "../../../common/contanst";
@@ -64,7 +64,7 @@ const UserDashboard = () => {
     }
     
     useEffect(() => {
-        dispatch(getListPlanAction());
+        dispatch(getUserPlansAction());
         dispatch(getBudgetAction());
         dispatch(getListGeoAction());
     }, []);

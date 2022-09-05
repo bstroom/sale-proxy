@@ -19,6 +19,7 @@ class OrdersPlans extends Model
         'quantity',
         'key_id',
         'amount',
+        'geo_key'
     ];
 
     public function user()

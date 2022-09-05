@@ -15,7 +15,10 @@ const CreatePlan = () => {
     const dispatch = useDispatch();
     const {promiseInProgress} = usePromiseTracker();
     const onSubmit = (value) => {
-        dispatch(createPlanAction(value));
+        dispatch(createPlanAction({
+            ...value,
+            is_active: !!value.is_active
+        }));
     }
     return (
         <Form
@@ -72,8 +75,8 @@ const CreatePlan = () => {
                     }}
                 />
             </Form.Item>
-            <Form.Item name="is_active" label="Hiển thị" valuePropName="checked">
-                <Switch />
+            <Form.Item name="is_active" label="Hiển thị" valuePropName="checked" initialValue={false}>
+                <Switch checkedChildren={true} unCheckedChildren={false}/>
             </Form.Item>
             <div className="form-bottom">
                 <Button type="primary" htmlType="submit" loading={promiseInProgress} disabled={promiseInProgress}>Tạo gói</Button>

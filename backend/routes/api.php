@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UsersController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\PlanController;
+use App\Http\Controllers\API\UserPlanController;
 use App\Http\Controllers\API\GeoController;
 use App\Http\Controllers\API\IncomePaymentController;
 use App\Http\Controllers\API\UserPaymentController;
@@ -34,8 +35,15 @@ Route::group(['middleware' => 'jwt'], function() {
     });
 
     Route::group(['prefix' => 'plans', 'controller' => PlanController::class], function () {
-        Route::get('', 'index');
+        Route::get('', 'index')->middleware(['jwt:admin']);
+        Route::get('{id}', 'show')->middleware(['jwt:admin']);
+        Route::put('{id}/edit', 'edit')->middleware(['jwt:admin']);
         Route::post('', 'store')->middleware(['jwt:admin']);
+        Route::delete('{id}', 'delete')->middleware(['jwt:admin']);
+    });
+
+    Route::group(['prefix' => 'user-plans', 'controller' => UserPlanController::class], function () {
+        Route::get('', 'index');
     });
 
     Route::group(['prefix' => 'geos', 'controller' => GeoController ::class], function () {

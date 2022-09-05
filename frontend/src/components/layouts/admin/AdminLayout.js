@@ -1,5 +1,5 @@
 import { Layout, Menu } from 'antd';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from "../Header";
 import {useNavigate} from "react-router-dom";
 import { useLocation } from "react-router-dom"
@@ -9,15 +9,17 @@ const { Content, Sider } = Layout;
 const AdminLayout = ({children}) => {
     const navigate = useNavigate();
     const location = useLocation();
-    let defaultOpenKeys = '';
-    const paths = location.pathname.split('/').filter(Boolean);
-    if (paths.length >= 3) {
-        defaultOpenKeys = '/' + paths.slice(0 , -1).join('/');
-    }
-    
+    let [defaultOpenKeys, setDefaultOpenKey] = useState('');
     const onSelect = (v) => {
         navigate(v.key);
     }
+    
+    useEffect(() => {
+        const paths = location.pathname.split('/').filter(Boolean);
+        if (paths.length >= 3) {
+            setDefaultOpenKey('/' + paths.slice(0 , -1).join('/'));
+        }
+    }, [location.pathname]);
     
     return <Layout className="admin">
         <Header/>
@@ -27,7 +29,9 @@ const AdminLayout = ({children}) => {
                     mode="inline"
                     defaultSelectedKeys={[location.pathname]}
                     defaultOpenKeys={[defaultOpenKeys]}
+                    selectedKeys={defaultOpenKeys}
                     onSelect={onSelect}
+                    
                     style={{
                         height: '100%',
                         borderRight: 0,

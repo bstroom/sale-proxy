@@ -1,7 +1,7 @@
 import {START_LOADING, END_LOADING} from "../actions/appActions";
 
 const initialState = {
-    loading: true,
+    loading: false,
 };
 
 export default function (state = initialState, action) {

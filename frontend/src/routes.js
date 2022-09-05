@@ -1,6 +1,6 @@
 import {Login, Register} from "./pages/auth";
 import {Home} from "./pages/home";
-import {CreatePlan, ListPlan} from "./pages/admin/plan";
+import {CreatePlan, EditPlan, ListPlan} from "./pages/admin/plan";
 import {ListProxy, GeoList, ImportProxy} from "./pages/admin/proxy";
 import {MemberList} from "./pages/admin/member";
 
@@ -55,6 +55,11 @@ export const routes = [
             {
                 path: '/plan/create',
                 page: CreatePlan,
+                exact: true,
+            },
+            {
+                path: '/plan/detail/:id',
+                page: EditPlan,
                 exact: true,
             },
             {

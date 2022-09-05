@@ -2,7 +2,7 @@ import axios from 'axios';
 import {TOKEN_KEY} from "../common/contanst";
 
 const httpClient = axios.create({
-    baseURL: 'https://proxylist.fun/api',
+    baseURL: 'http://localhost:8000/api',
 });
 
 httpClient.interceptors.response.use((res) => {
