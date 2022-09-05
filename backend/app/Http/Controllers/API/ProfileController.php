@@ -25,7 +25,7 @@ class ProfileController extends Controller
         return response()->json([
             'status' => 'SUCCESS',
             'statusCode' => 200,
-            'data' => auth('api')->user()
+            'data' => $this->userRepository->find(auth('api')->user()->id)
         ]);
     }
 

@@ -27,7 +27,7 @@ class AuthController extends Controller {
             ], 400);
         }
 
-        $user = auth('api')->user();
+        $user = $this->userRepo->find(auth('api')->user()->id);
         return response()->json([
             'status' => 'SUCCESS',
             'statusCode' => 200,
