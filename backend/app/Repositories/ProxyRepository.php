@@ -69,6 +69,7 @@ class ProxyRepository extends Repository {
 
         $list = Proxy::where($condition)
             ->whereIn('type', explode(',', $orderPlan->proxy_type))
+            ->select('ip', 'port', 'geo_local', 'ms', 'type')
             ->take($orderPlan->plan->amount);
 
         return $list->get()->toArray() ?? [];
@@ -88,6 +89,7 @@ class ProxyRepository extends Repository {
 
         $list = Proxy::where($condition)
             ->whereIn('type', explode(',', $orderPlan->proxy_type))
+            ->select('ip', 'port', 'geo_local', 'ms', 'type')
             ->take($orderPlan->plan->amount)->get()->toArray();
 
         return $list[array_rand($list)];
