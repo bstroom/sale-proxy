@@ -8,26 +8,26 @@ const UnAuthRoute = ({children}) => {
     const location = useLocation();
     
     useEffect(() => {
-        if (!auth) {
-            return children;
-        } else {
+        if (auth) {
             const search = location.search.substring(1);
             if (search) {
                 const obj = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
                 if (obj.from) {
                     if (obj.from.indexOf('admin') > 0 && role !== 'ADMIN') {
                         navigate('/dashboard');
-                        return;
+                    } else if (obj.from !== '/') {
+                        navigate(obj.from);
+                    } else {
+                        navigate('/dashboard')
                     }
-                    navigate(obj.from);
-                    return;
                 }
             } else {
                 navigate(role === 'ADMIN' ? '/admin' : '/dashboard');
             }
         }
-
-    }, [auth, location])
+    }, [auth])
+    
+    return !auth ? children : <></>;
 }
 
 export default UnAuthRoute;
