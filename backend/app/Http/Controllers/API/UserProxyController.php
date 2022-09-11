@@ -35,8 +35,32 @@ class UserProxyController extends Controller
         ], 400);
     }
 
-    public function show(GetSingleProxyRequest $request): array
+    public function show(GetSingleProxyRequest $request, $type): \Illuminate\Http\JsonResponse
     {
-        return [];
+        if (!in_array($type, ['single-proxy', 'file'])) {
+
+        }
+
+        if ($type === 'single-proxy') {
+            $result = $this->proxyRepository->getSinglePremiumProxy($request->validated());
+
+            if ($result) {
+                return response()->json([
+                    'status' => 'SUCCESS',
+                    'statusCode' => 200,
+                    'data' => $result
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'ERROR',
+                'statusCode' => 400,
+            ], 400);
+        }
+
+        return response()->json([
+            'status' => 'ERROR',
+            'statusCode' => 400,
+        ], 400);
     }
 }

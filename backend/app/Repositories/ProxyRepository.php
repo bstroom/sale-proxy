@@ -57,6 +57,44 @@ class ProxyRepository extends Repository {
 
     public function getPremiumProxies(array $data): bool | array
     {
+        if (!$order = $this->checkGetPremiumProxy($data)) {
+            return false;
+        }
+
+        $orderPlan = $order->orderPlans->first();
+        $condition = [];
+        if ($orderPlan->geo_key !== 'ALL') {
+            $condition['geo_local'] = $orderPlan->geo_key;
+        }
+
+        $list = Proxy::where($condition)
+            ->whereIn('type', explode(',', $orderPlan->proxy_type))
+            ->take($orderPlan->plan->amount);
+
+        return $list->get()->toArray() ?? [];
+    }
+
+    public function getSinglePremiumProxy(array $data): bool | array
+    {
+        if (!$order = $this->checkGetPremiumProxy($data)) {
+            return false;
+        }
+
+        $orderPlan = $order->orderPlans->first();
+        $condition = [];
+        if ($orderPlan->geo_key !== 'ALL') {
+            $condition['geo_local'] = $orderPlan->geo_key;
+        }
+
+        $list = Proxy::where($condition)
+            ->whereIn('type', explode(',', $orderPlan->proxy_type))
+            ->take($orderPlan->plan->amount)->get()->toArray();
+
+        return $list[array_rand($list)];
+    }
+
+    private function checkGetPremiumProxy($data): bool | Order
+    {
         $key = $data['key'];
         $order = Order::whereHas('key', function($query) use($key) {
             $query->where(['key' =>  $key]);
@@ -71,16 +109,7 @@ class ProxyRepository extends Repository {
         if ($order->key->expired_at < Carbon::now()) {
             return false;
         }
-        $orderPlan = $order->orderPlans->first();
-        $condition = [];
-        if ($orderPlan->geo_key !== 'ALL') {
-            $condition['geo_local'] = $orderPlan->geo_key;
-        }
 
-        $list = Proxy::where($condition)
-            ->whereIn('type', explode(',', $orderPlan->proxy_type))
-            ->take($orderPlan->plan->amount);
-
-        return $list->get()->toArray() ?? [];
+        return $order;
     }
 }

@@ -27,7 +27,7 @@ const UserProxy = () => {
         }
 
         setProxyFiltered(premiums.filter((proxy) => proxy.geo_local === filterCode));
-    }, [filterCode]);
+    }, [filterCode, premiums]);
     
     const back = () => {
         navigate(-1);

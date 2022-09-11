@@ -21,7 +21,7 @@ class PlanController extends Controller
 
     public function index(): JsonResponse
     {
-        $data = $this->planRepository->get();
+        $data = $this->planRepository->whereNull('deleted_at')->get();
 
         return response()->json([
            'status' => 'SUCCESS',

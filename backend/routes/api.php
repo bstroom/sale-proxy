@@ -91,5 +91,5 @@ Route::group(['prefix' => 'auth'], function() {
 
 Route::group(['prefix' => 'premium', 'middleware' => 'throttle:100,300', 'controller' => UserProxyController::class], function() {
     Route::get('list-proxy', 'index');
-    Route::get('single-proxy', 'show');
+    Route::get('{type}', 'show');
 });
