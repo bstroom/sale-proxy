@@ -1,12 +1,15 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Button, Table} from 'antd';
+import {Button, message, Select, Table} from 'antd';
 import {usePromiseTracker} from "react-promise-tracker";
 import { useNavigate, useParams} from "react-router-dom";
-import {getPremiumProxyActions} from "../../../store/actions/proxyActions";
+import {getListGeoAction, getPremiumProxyActions} from "../../../store/actions/proxyActions";
 
 const UserProxy = () => {
     const premiums = useSelector(state => state.proxies.premiums);
+    const geoList = useSelector(state => state.proxies.geos);
+    const [proxyFiltered, setProxyFiltered] = useState([]);
+    const [filterCode, setFilterCode] = useState('ALL');
     const {promiseInProgress} = usePromiseTracker();
     const dispatch = useDispatch();
     const params = useParams();
@@ -14,17 +17,32 @@ const UserProxy = () => {
 
     useEffect(() => {
         dispatch(getPremiumProxyActions(params.key));
+        dispatch(getListGeoAction());
     }, [params, dispatch]);
+    
+    useEffect(() => {
+        if (filterCode === 'ALL') {
+            setProxyFiltered(premiums);
+            return;
+        }
+
+        setProxyFiltered(premiums.filter((proxy) => proxy.geo_local === filterCode));
+    }, [filterCode]);
     
     const back = () => {
         navigate(-1);
     }
     
     const exportTxt = () => {
+        if (!proxyFiltered.length) {
+            message.error('Danh sách rỗng!')    ;
+            return;
+        }
+        
         const element = document.createElement("a");
         const file = new Blob([
-            premiums.reduce((acc, item) => {
-                acc += [item.ip, item.port,item.geo_local,item.ms].join('|') + "\r\n";
+            proxyFiltered.reduce((acc, item) => {
+                acc += item.ip + ':' + item.port + "\r\n";
                 return acc;
             }, '')
         ], {type: 'text/plain'});
@@ -32,6 +50,10 @@ const UserProxy = () => {
         element.download = params.key + ".txt";
         document.body.appendChild(element);
         element.click();
+    }
+    
+    const handleFilterChange = (v) => {
+        setFilterCode(v);
     }
     
     const columns = [
@@ -58,14 +80,27 @@ const UserProxy = () => {
     ];
 
     return <>
-        <div style={{marginBottom: '1rem'}}>
-            <Button onClick={back}>Trở lại</Button>
+        <div className="user-proxy-detail-header">
+            <div className="user-proxy-detail-left">
+                <div style={{marginBottom: '1rem'}}>
+                    <Button onClick={back}>Trở lại</Button>
+                </div>
+                <h3>KEY: {params.key}</h3>
+            </div>
+            <div className="user-proxy-detail-right">
+                <Select defaultValue={filterCode} style={{ width: 200 }} onChange={handleFilterChange}>
+                    <Select.Option value="ALL">Tất cả</Select.Option>
+                    {geoList.map(geo => {
+                        return <Select.Option value={geo.code}>{geo.name}</Select.Option>;
+                    })}
+                </Select>
+                <Button onClick={exportTxt} type="primary" style={{marginLeft: "10px"}}>Export</Button>
+            </div>
         </div>
-        <h3>KEY: {params.key}</h3>
-        <Button onClick={exportTxt} type="primary">Export</Button>
+        
         <Table 
             loading={promiseInProgress} 
-            dataSource={premiums} 
+            dataSource={proxyFiltered} 
             columns={columns} 
             rowKey="id"
         />;

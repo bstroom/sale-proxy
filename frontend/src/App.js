@@ -4,7 +4,7 @@ import {Spin} from 'antd';
 import PrivateRoute from "./components/PrivateRoute";
 import UnAuthRoute from "./components/UnAuthRoute";
 import {useDispatch, useSelector} from "react-redux";
-import {endLoadingAction, startLoadingAction} from "./store/actions/appActions";
+import {endLoadingAction} from "./store/actions/appActions";
 import {useLocalStorage} from "./hooks";
 import {TOKEN_KEY} from "./common/contanst";
 import {getMeAction} from "./store/actions/profileActions";

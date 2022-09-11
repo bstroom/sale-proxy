@@ -106,10 +106,10 @@ const UserProxy = () => {
                     return ''
                 }
                 
-                if (isAfter(new Date(fields.key?.expired_at), new Date(fields.key?.created_at))) {
+                if (isAfter(new Date(fields.key?.expired_at), new Date())) {
                     return <span style={{color: 'green'}}>
                         Còn hạn khoảng <strong>
-                        {formatDistance(new Date(fields.key?.expired_at), new Date(fields.key?.created_at),  {locale: vi})}</strong></span>
+                        {formatDistance(new Date(fields.key?.expired_at), new Date(),  {locale: vi})}</strong></span>
                 } else {
                     return <span style={{color: 'red'}}>Hết hạn</span>
                 }
@@ -121,9 +121,10 @@ const UserProxy = () => {
             key: '9',
             fixed: 'right',
             render(_, fields) {
+                const isAlive = isAfter(new Date(fields.key?.expired_at), new Date());
                 return <>
                     <Button type="primary" onClick={() => onCopy(fields.key?.key)}>Lấy API key</Button>
-                    {isAfter(new Date(fields.key?.expired_at), new Date(fields.key?.created_at))  && <Button type="primary" style={{marginLeft: '5px'}}>
+                    {isAlive && <Button type="primary" style={{marginLeft: '5px'}}>
                         <Link to={"/dashboard/proxy/" + fields.key?.key}>Xem</Link>
                     </Button>}
                     </>;
@@ -138,7 +139,7 @@ const UserProxy = () => {
             columns={columns} 
             scroll={{ x: 1500 }}
             rowKey="id"
-        />;
+        />
     </>;
 }
 

@@ -66,7 +66,7 @@ class BudgetRepository extends Repository {
             if ($history['type'] === 'OUT') {
                 list($name, $planId) = explode('_', $history['content']);
                 $plan = Plan::find($planId);
-                return 'Ngày '.$date.', Chi tiêu '.number_format($history['amount']).'đ mua gói '.$plan->name;
+                return 'Ngày '.$date.', Chi tiêu '.number_format($history['amount']).'đ mua gói '.$plan?->name;
             }
             if ($history['type'] === 'IN') {
                 return 'Ngày '.$date.', Nạp với số tiền '. number_format($history['amount']).'đ';
