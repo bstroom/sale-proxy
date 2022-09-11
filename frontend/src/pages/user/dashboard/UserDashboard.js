@@ -17,7 +17,7 @@ const UserDashboard = () => {
     const dispatch = useDispatch();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [local, setLocal] = useState('ALL');
-    const planList = useSelector((state) => state.plans.list);
+    const planList = useSelector((state) => state.plans.userList);
     const geoList = useSelector((state) => state.proxies.geos);
     const budget = useSelector(state => state.payment.budget);
     const [currentPlan, setCurrentPlan] = useState(null);

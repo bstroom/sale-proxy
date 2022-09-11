@@ -15,7 +15,6 @@ export const getListPlanAction = () => async (dispatch) => {
             payload: data,
         });
     } catch (err) {
-        // localStorage.removeItem(TOKEN_KEY);
     }
     finally {
     }
@@ -29,7 +28,6 @@ export const getUserPlansAction = () => async (dispatch) => {
             payload: data,
         });
     } catch (err) {
-        // localStorage.removeItem(TOKEN_KEY);
     }
     finally {
     }

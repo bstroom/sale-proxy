@@ -18,7 +18,7 @@ export default function (state = initialState, action) {
                 ...state,
                 list: action.payload,
             };
-            GET_USER_PLAN_SUCCESS:
+         case GET_USER_PLAN_SUCCESS:
              return {
                 ...state,
                 userList: action.payload,

@@ -1,7 +1,7 @@
 import {GET_CONFIG_SUCCESS} from "../actions/configActions";
 
 const initialState = {
-    payment: {},
+    payment: [],
 };
 
 export default function (state = initialState, action) {

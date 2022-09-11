@@ -34,7 +34,7 @@ const Header = () => {
                     </div>
                 }
                 {
-                    isAuth && <div>
+                    isAuth && <div className="user">
                         Xin chào, {auth.user?.last_name} {auth.user?.first_name}, <a onClick={logout}>Logout</a>
                     </div>
                 }

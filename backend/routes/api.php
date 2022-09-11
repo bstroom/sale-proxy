@@ -71,8 +71,11 @@ Route::group(['middleware' => 'jwt'], function() {
         Route::get('', 'index');
     });
     Route::group(['prefix' => 'configs', 'controller' => ConfigController::class], function () {
-        Route::post('', 'create');
-        Route::get('', 'show');
+        Route::post('', 'create')->middleware(['jwt:admin']);
+        Route::put('{id}', 'edit')->middleware(['jwt:admin']);
+        Route::delete('{id}', 'delete')->middleware(['jwt:admin']);
+        Route::get('', 'index');
+        Route::get('{id}', 'show');
     });
     Route::group(['prefix' => 'dashboard', 'controller' => DashboardController::class], function () {
         Route::get('', 'index')->middleware(['jwt:admin']);

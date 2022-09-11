@@ -10,7 +10,7 @@ import {UserLayout} from "./components/layouts/user";
 import {UserDashboard} from "./pages/user/dashboard";
 import {Payment} from "./pages/user/payment";
 import {UserProxy, UserProxyDetail} from "./pages/user/proxy";
-import {Charge, Information} from "./pages/admin/payment";
+import {Charge, CreatePayment, EditPayment, Information} from "./pages/admin/payment";
 import {UserProfile} from "./pages/user/profile";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
@@ -90,6 +90,16 @@ export const routes = [
             {
                 path: '/payment/information',
                 page: Information,
+                exact: true,
+            },
+            {
+                path: '/payment/create',
+                page: CreatePayment,
+                exact: true,
+            },
+            {
+                path: '/payment/:id',
+                page: EditPayment,
                 exact: true,
             },
             {

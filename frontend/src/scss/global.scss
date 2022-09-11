@@ -46,7 +46,26 @@ body {
   background: #fff;
 }
 
+.ant-table {
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+}
+
 h1 {
   font-size: 32px;
   font-weight: bold;
+  @media screen and (max-width: 767px) {
+    font-size: 22px;
+  }
+}
+
+.ant-layout-content {
+  @media screen and (max-width: 677px) {
+    padding: 0 !important;
+  }
+}
+
+.uppercase {
+  text-transform: uppercase;
 }

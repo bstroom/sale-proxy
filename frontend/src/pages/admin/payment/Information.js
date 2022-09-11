@@ -1,78 +1,49 @@
-import {Button, Form, Input, message} from "antd";
-import {usePromiseTracker} from "react-promise-tracker";
 import {useDispatch, useSelector} from "react-redux";
-import {createConfigAction, getConfigAction} from "../../../store/actions/configActions";
+import {getListConfigAction} from "../../../store/actions/configActions";
 import {useEffect} from "react";
+import {Link} from "react-router-dom";
+import {Button, message} from "antd";
+import httpClient from "../../../services/httpClient";
 
 const Information = () => {
-    const {promiseInProgress} = usePromiseTracker();
-    const config = useSelector(state => state.configs.payment);
+    const payments = useSelector(state => state.configs.payment);
     const dispatch = useDispatch();
-    const onSubmit = (v) => {
-        dispatch(createConfigAction(v, () => {
-            message.success('Cập nhật thành công');
-        }, () => {
-            message.error('Cập nhật thất bại');
-        }));
+    
+    const deletePayment = (id) => {
+        httpClient.delete(`/configs/${id}`).then(() => {
+            message.success('Xóa thành công');
+            dispatch(getListConfigAction());
+        }).catch(() => {
+            message.error('Xóa thất bại')
+        })
     }
     
     useEffect(() => {
-        dispatch(getConfigAction());
+        dispatch(getListConfigAction());
     }, []);
     
-    return  !promiseInProgress && <Form
-        onFinish={onSubmit}
-        initialValues={config}
-    >
-        <Form.Item
-            label="Chủ tài khoản"
-            name={"payment_name"}
-            rules={[
-                {required: true, message: 'Trường này bắt buộc'}
-            ]}
-        >
-            <Input
-                placeholder="Tên người nhận tiền"
-            />
-        </Form.Item>
-        <Form.Item
-            label="Số tài khoản"
-            name={"payment_card_number"}
-            rules={[
-                {required: true, message: 'Trường này bắt buộc'}
-            ]}
-        >
-            <Input
-                placeholder="Số tài khoản"
-            />
-        </Form.Item>
-        <Form.Item
-            label="Tên ngân hàng"
-            name={"payment_bank_name"}
-            rules={[
-                {required: true, message: 'Trường này bắt buộc'}
-            ]}
-        >
-            <Input
-                placeholder="Tên ngân hàng"
-            />
-        </Form.Item>
-        <Form.Item
-            label="Ghi chú"
-            name={"payment_description"}
-            rules={[
-                {required: true, message: 'Trường này bắt buộc'},
-            ]}
-        >
-            <Input
-                placeholder="Ghi chú"
-            />
-        </Form.Item>
-
-        <div className="form-bottom">
-            <Button type="primary" htmlType="submit" loading={promiseInProgress}>Cập nhật</Button>
-        </div>
-    </Form>;
+    return  <div className="payment-list">
+        {payments.map((payment) => {
+            return <div className="payment-item" key={payment.id}>
+                <table>
+                    <tr><td>Tên ngân hàng:</td> <td>{payment.payment_bank_name}</td></tr>
+                    <tr><td>Số tài khoản:</td> <td>{payment.payment_card_number}</td></tr>
+                    <tr><td>Ghi chú: </td><td>{payment.payment_description}</td></tr>
+                    <tr><td>Người nhận:</td><td>{payment.payment_name}</td></tr>
+                </table>
+                <div className="payment-item-footer">
+                    <Link to={`/admin/payment/${payment.id}`}>
+                        <Button>Edit</Button>
+                    </Link>
+                    <Button
+                        type="danger"
+                        style={{marginLeft: '10px'}}
+                        onClick={() => deletePayment(payment.id)}
+                    >Delete</Button>
+                </div>
+            </div>
+        })}
+    </div>;
 }
 
 export default Information;

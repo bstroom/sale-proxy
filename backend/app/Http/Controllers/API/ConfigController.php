@@ -15,27 +15,59 @@ class ConfigController extends Controller
         $this->configRepository = $configRepository;
     }
 
-    public function show()
+    public function index()
+    {
+        return response()->json([
+            'status' => 'SUCCESS',
+            'statusCode' => 200,
+            'data' => $this->configRepository->orderBy('created_at', 'DESC')->all()
+        ]);
+    }
+
+    public function show($id)
     {
         return response()->json([
           'status' => 'SUCCESS',
           'statusCode' => 200,
-          'data' => $this->configRepository->orderBy('created_at', 'DESC')->first()
+          'data' => $this->configRepository->find($id)
         ]);
     }
 
     public function create(CreateConfigRequest $request)
     {
-        if ($config = $this->configRepository->orderBy('created_at', 'DESC')->first()) {
-            $result = $config->update($request->validated());
-        } else {
-            $result = $this->configRepository->create($request->validated());
-        }
+        $result = $this->configRepository->create($request->validated());
 
         return response()->json([
             'status' => 'SUCCESS',
             'statusCode' => 200,
             'data' => $result
+        ], 200);
+    }
+
+    public function edit(CreateConfigRequest $request, $id)
+    {
+        $config = $this->configRepository->find($id);
+        $result = $config->update($request->validated());
+
+        return response()->json([
+            'status' => 'SUCCESS',
+            'statusCode' => 200,
+            'data' => $result
+        ], 200);
+    }
+
+    public function delete($id)
+    {
+        if (!$this->configRepository->delete($id)) {
+            return response()->json([
+                'status' => 'ERROR',
+                'statusCode' => 400,
+            ], 400);
+        }
+
+        return response()->json([
+            'status' => 'SUCCESS',
+            'statusCode' => 200,
         ], 200);
     }
 }

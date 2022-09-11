@@ -1,0 +1,26 @@
+.payment-list {
+  display: flex;
+  column-gap: 20px;
+  
+  .payment-item {
+    border: 1px solid #efefef;
+    border-radius: 4px;
+    padding: 2rem;
+    
+    &-footer {
+      margin-top: 20px;
+      @include flex-center();
+    }
+    
+    table tr {
+      border-bottom: 1px solid #efefef;
+      
+      td {
+        &:first-child {
+          font-weight: bold;
+          padding-right: 20px;
+        }
+      }
+    }
+  }
+}
