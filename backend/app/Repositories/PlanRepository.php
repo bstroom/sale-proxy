@@ -27,13 +27,13 @@ class PlanRepository extends Repository {
             return false;
         }
 
-        $plan->name = $plan['name'];
-        $plan->amount = $plan['amount'];
-        $plan->price = $plan['price'];
-        $plan->type = $plan['type'];
-        $plan->proxy_type = $plan['proxy_type'];
-        $plan->description = $plan['description'];
-        $plan->is_active = $plan['is_active'];
+        $plan->name = $data['name'];
+        $plan->amount = $data['amount'];
+        $plan->price = $data['price'];
+        $plan->type = $data['type'];
+        $plan->proxy_type = implode(',', $data['proxy_type']);
+        $plan->description = $data['description'];
+        $plan->is_active = $data['is_active'];
         $plan->save();
 
         return true;
