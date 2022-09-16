@@ -22,8 +22,11 @@ class ProxyRepository extends Repository {
             return false;
         }
         foreach ($data as $item) {
-            list($ip, $port, $geo, $ms) = explode('|', $item);
-
+            $ex = explode('|', $item);
+            $ip = $ex[0] ?? '';
+            $port = $ex[1] ?? '';
+            $geo = $ex[2] ?? '';
+            $ms = $ex[3] ?? '';
             if ($ip && $port && $geo && $ms) {
                 $importList[] = [
                     'ip' => $ip,
