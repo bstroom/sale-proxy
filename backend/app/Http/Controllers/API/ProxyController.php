@@ -49,13 +49,14 @@ class ProxyController extends Controller
     {
         try {
             $data = [];
-            $file = $request->file('files');
-            $path = $file->getRealPath();
+            $path = $request->file('files')->getRealPath();
             $file = fopen($path, 'r');
+
             while(!feof($file)) {
                 $data[] = preg_replace("/\r\n|\r|\n/", '', fgets($file));
             }
             fclose($file);
+            Log::write('error', date('Y-m-d').' Import total '.count($data));
 
             $result = $this->proxyRepository->import($data, $type);
 
@@ -71,7 +72,7 @@ class ProxyController extends Controller
                 ], 400);
             }
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::write('error', $e);
 
             return response()->json([
                 'status' => 'SERVER ERROR',
