@@ -5,7 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProxyRequest;
 use App\Repositories\ProxyRepository;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class ProxyController extends Controller
 {
@@ -16,14 +19,20 @@ class ProxyController extends Controller
         $this->proxyRepository = $proxyRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $list = $this->proxyRepository->all();
+            $page = $request->get('page', 1);
+            $limit = $request->get('limit', 100);
+            $type = $request->get('type', 'HTTP');
+
+            $list = $this->proxyRepository->where(['type' => $type])->skip(($page - 1) * $limit)->take($limit)->get();
+            $total = $this->proxyRepository->where(['type' => $type])->count();
             return response()->json([
                 'status' => 'SUCCESS',
                 'statusCode' => 200,
-                'data' => $list
+                'data' => $list,
+                'total' => $total,
             ]);
         } catch (\Exception $e) {
             Log::write($e);
@@ -39,8 +48,10 @@ class ProxyController extends Controller
     public function create(CreateProxyRequest $request, $type)
     {
         try {
-            $file = fopen($request->file('files'), "r") or exit("Unable to open file!");
             $data = [];
+            $file = $request->file('files');
+            $path = $file->getRealPath();
+            $file = fopen($file, 'r');
             while(!feof($file)) {
                 $data[] = preg_replace("/\r\n|\r|\n/", '', fgets($file));
             }
