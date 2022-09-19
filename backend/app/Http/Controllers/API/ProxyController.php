@@ -18,12 +18,22 @@ class ProxyController extends Controller
 
     public function index()
     {
-        $list = $this->proxyRepository->all();
-        return response()->json([
-            'status' => 'SUCCESS',
-            'statusCode' => 200,
-            'data' => $list
-        ]);
+        try {
+            $list = $this->proxyRepository->all();
+            return response()->json([
+                'status' => 'SUCCESS',
+                'statusCode' => 200,
+                'data' => $list
+            ]);
+        } catch (\Exception $e) {
+            Log::write($e);
+
+            return response()->json([
+                'status' => 'ERROR',
+                'statusCode' => 200,
+                'data' => []
+            ]);
+        }
     }
 
     public function create(CreateProxyRequest $request, $type)
