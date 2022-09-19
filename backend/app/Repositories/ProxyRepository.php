@@ -47,7 +47,7 @@ class ProxyRepository extends Repository {
         try {
             Proxy::where(['type' => $type])->delete();
 
-            foreach (array_chunk($importList,1000) as $t)
+            foreach (array_chunk($importList,800) as $t)
             {
                 Proxy::insert($t);
             }
@@ -55,7 +55,7 @@ class ProxyRepository extends Repository {
 
             return true;
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::write('error', $e);
 
             return false;
         }
