@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'cors' =>       \App\Http\Middleware\Cors::class,
         'jwt' => \App\Http\Middleware\VerifyJWTToken::class,
         'jwt:admin' => \App\Http\Middleware\VerifyAdmin::class,
-        'jwt:importer' => \App\Http\Middleware\VerifyImporter::class
+        'jwt:importer' => \App\Http\Middleware\VerifyImporter::class,
+        'json' => \App\Http\Middleware\ForceJson::class
     ];
 }

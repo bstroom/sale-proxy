@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'jwt'], function() {
+Route::group(['middleware' => ['jwt', 'json']], function() {
     Route::group(['prefix' => 'profile', 'controller' => ProfileController::class], function () {
         Route::get('me', 'show');
         Route::post('me', 'edit');
