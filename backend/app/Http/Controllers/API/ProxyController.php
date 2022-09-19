@@ -51,7 +51,7 @@ class ProxyController extends Controller
             $data = [];
             $file = $request->file('files');
             $path = $file->getRealPath();
-            $file = fopen($file, 'r');
+            $file = fopen($path, 'r');
             while(!feof($file)) {
                 $data[] = preg_replace("/\r\n|\r|\n/", '', fgets($file));
             }
