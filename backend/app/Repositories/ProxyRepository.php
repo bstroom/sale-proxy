@@ -45,11 +45,15 @@ class ProxyRepository extends Repository {
         }
 
         try {
-            Proxy::where(['type' => $type])->delete();
+            do {
+                $deleted = Proxy::where('type', $type)->limit(1000)->delete();
+                sleep(1);
+            } while ($deleted > 0);
 
-            foreach (array_chunk($importList,800) as $t)
+            foreach (array_chunk($importList,1000, true) as $t)
             {
                 Proxy::insert($t);
+                sleep(1);
             }
 
 
