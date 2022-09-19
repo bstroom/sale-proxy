@@ -1,7 +1,16 @@
-import {GET_LIST_GEO_SUCCESS, GET_LIST_PROXY_SUCCESS, GET_PREMIUM_PROXY_SUCCESS} from "../actions/proxyActions";
+import {
+    CLEAR_PROXY_LIST,
+    GET_LIST_GEO_SUCCESS,
+    GET_LIST_PROXY_SUCCESS,
+    GET_PREMIUM_PROXY_SUCCESS,
+} from "../actions/proxyActions";
 
 const initialState = {
-    list: [],
+    list: {
+        data: [],
+        type: 'HTTP',
+        total: 0
+    },
     geos: [],
     premiums: [],
 };
@@ -22,6 +31,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 premiums: action.payload
+            }
+        case CLEAR_PROXY_LIST:
+            return {
+                ...state,
+                list: {...initialState.list}
             }
         default:
             return state;

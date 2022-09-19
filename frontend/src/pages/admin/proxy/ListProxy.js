@@ -1,18 +1,43 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { Table } from 'antd';
-import {getListProxyAction} from "../../../store/actions/proxyActions";
+import {clearListProxyAction, getListProxyAction} from "../../../store/actions/proxyActions";
 import { Tabs } from 'antd';
 import React from 'react';
 const { TabPane } = Tabs;
 
-const ListProxy = () => {
-    const proxyList = useSelector(state => state.proxies.list);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getListProxyAction());
-    }, [dispatch]);
+const DEFAULT_TAB_KEY = 'HTTP';
 
+const ListProxy = () => {
+    const proxyMetadata = useSelector(state => state.proxies.list);
+    const dispatch = useDispatch();
+    const [listParams, setListParams] = useState({
+        type: DEFAULT_TAB_KEY,
+        page: 1,
+        limit: 10
+    });
+    
+    const handleTableChange = (page) => {
+        dispatch(clearListProxyAction());
+        setListParams({
+            ...listParams,
+            page: page.current
+        })
+    }
+    
+    useEffect(() => {
+        dispatch(getListProxyAction(listParams));
+    }, [dispatch, listParams]);
+    
+    const onTabChange = (tab) => {
+        dispatch(clearListProxyAction());
+        
+        setListParams({
+            ...listParams,
+            type: tab
+        });  
+    }
+    
     const columns = [
         {
             title: 'IP',
@@ -37,18 +62,18 @@ const ListProxy = () => {
     ];
 
     return <>
-        <Tabs defaultActiveKey="1">
-            <TabPane tab="HTTP" key="1">
-                <Table dataSource={proxyList.filter((i) => i.type === 'HTTP')} columns={columns} rowKey="id"/>
+        <Tabs defaultActiveKey={DEFAULT_TAB_KEY} onChange={onTabChange}>
+            <TabPane tab="HTTP" key="HTTP">
+                <Table dataSource={proxyMetadata.data} columns={columns} rowKey="id" loading={!proxyMetadata.data?.length} pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total}}  onChange={handleTableChange}/>
             </TabPane>
-            <TabPane tab="SOCKS4" key="2">
-                <Table dataSource={proxyList.filter((i) => i.type === 'SOCKS4')} columns={columns} rowKey="id"/>
+            <TabPane tab="SOCKS4" key="SOCKS4">
+                <Table dataSource={proxyMetadata.data} columns={columns} rowKey="id" loading={!proxyMetadata.data?.length} pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total}}  onChange={handleTableChange}/>
             </TabPane>
-            <TabPane tab="SOCKS5" key="3">
-                <Table dataSource={proxyList.filter((i) => i.type === 'SOCKS5')} columns={columns} rowKey="id"/>
+            <TabPane tab="SOCKS5" key="SOCKS5">
+                <Table dataSource={proxyMetadata.data} columns={columns} rowKey="id" loading={!proxyMetadata.data?.length} pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total}}  onChange={handleTableChange}/>
             </TabPane>
-            <TabPane tab="SSH" key="4">
-                <Table dataSource={proxyList.filter((i) => i.type === 'SSH')} columns={columns} rowKey="id"/>
+            <TabPane tab="SSH" key="SSH">
+                <Table dataSource={proxyMetadata.data} columns={columns} rowKey="id" loading={!proxyMetadata.data?.length} pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total}}  onChange={handleTableChange}/>
             </TabPane>
         </Tabs>
     </>;
