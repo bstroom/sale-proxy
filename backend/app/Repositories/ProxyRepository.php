@@ -27,7 +27,7 @@ class ProxyRepository extends Repository {
             $port = $ex[1] ?? '';
             $geo = $ex[2] ?? '';
             $ms = $ex[3] ?? '';
-            $isVip = $ex[4] ? true : false;
+            $isVip = !empty($ex[4]) && $ex[4] == 'vip';
 
             if ($ip && $port && $geo && $ms) {
                 $importList[] = [
