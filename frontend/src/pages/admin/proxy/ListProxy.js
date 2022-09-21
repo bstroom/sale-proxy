@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import { Table } from 'antd';
+import {Select, Table} from 'antd';
 import {clearListProxyAction, getListProxyAction} from "../../../store/actions/proxyActions";
 import { Tabs } from 'antd';
 import React from 'react';
@@ -13,6 +13,7 @@ const ListProxy = () => {
     const dispatch = useDispatch();
     const [listParams, setListParams] = useState({
         type: DEFAULT_TAB_KEY,
+        filter_type: 'NORMAL',
         page: 1,
         limit: 10
     });
@@ -24,6 +25,13 @@ const ListProxy = () => {
             page: page.current,
             limit: page.pageSize
         })
+    }
+    
+    const onFilterTypeChange = (v) => {
+        setListParams({
+            ...listParams,
+            filter_type: v
+        });
     }
     
     useEffect(() => {
@@ -63,6 +71,14 @@ const ListProxy = () => {
     ];
 
     return <>
+        <div>
+            <div>
+                <Select style={{width: '250px'}} value={listParams.filter_type} onChange={onFilterTypeChange}>
+                    <Select.Option value="NORMAL">Loại proxy: Bình thường</Select.Option>
+                    <Select.Option value="VIP">Loại proxy: VIP</Select.Option>
+                </Select>
+            </div>
+        </div>
         <Tabs defaultActiveKey={DEFAULT_TAB_KEY} onChange={onTabChange}>
             <TabPane tab="HTTP" key="HTTP">
                 <Table dataSource={proxyMetadata.data} columns={columns} rowKey="id" loading={!proxyMetadata.data?.length} pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total, position: ['topRight']}}  onChange={handleTableChange}/>

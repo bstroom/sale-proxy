@@ -35,6 +35,9 @@ const ListPlan = () => {
             title: 'Tên gói',
             dataIndex: 'name',
             key: 'name',
+            render(name, field) {
+                return <> {name}  {!!field.is_vip && <Tag color='purple'>VIP</Tag>} </>
+            }
         },
         {
             title: 'Số lượng',

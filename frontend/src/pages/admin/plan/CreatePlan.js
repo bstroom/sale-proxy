@@ -17,7 +17,8 @@ const CreatePlan = () => {
     const onSubmit = (value) => {
         dispatch(createPlanAction({
             ...value,
-            is_active: !!value.is_active
+            is_active: !!value.is_active,
+            is_vip: !!value.is_vip
         }));
     }
     return (
@@ -76,6 +77,9 @@ const CreatePlan = () => {
                 />
             </Form.Item>
             <Form.Item name="is_active" label="Hiển thị" valuePropName="checked" initialValue={false}>
+                <Switch checkedChildren={true} unCheckedChildren={false}/>
+            </Form.Item>
+            <Form.Item name="is_vip" label="VIP" valuePropName="checked" initialValue={false}>
                 <Switch checkedChildren={true} unCheckedChildren={false}/>
             </Form.Item>
             <div className="form-bottom">

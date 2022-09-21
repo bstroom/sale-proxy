@@ -34,6 +34,7 @@ class PlanRepository extends Repository {
         $plan->proxy_type = implode(',', $data['proxy_type']);
         $plan->description = $data['description'];
         $plan->is_active = $data['is_active'];
+        $plan->is_vip = $data['is_vip'];
         $plan->save();
 
         return true;

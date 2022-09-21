@@ -48,6 +48,7 @@ Route::group(['middleware' => ['jwt', 'json']], function() {
 
     Route::group(['prefix' => 'geos', 'controller' => GeoController ::class], function () {
         Route::get('', 'index');
+        Route::put('{id}', 'edit');
     });
 
     Route::group(['prefix' => 'members', 'controller' => UsersController ::class], function () {

@@ -20,7 +20,8 @@ class Plan extends Model
         'description',
         'is_active',
         'deleted_at',
-        'user_id'
+        'user_id',
+        'is_vip'
     ];
 
     public function createdBy() {

@@ -19,7 +19,8 @@ const EditPlan = () => {
         dispatch(editPlanAction({
             ...detail,
             ...value,
-            is_active: !!value.is_active
+            is_active: !!value.is_active,
+            is_vip: !!value.is_vip
         }, () => {
             message.success('Chỉnh sửa thành công')
         }));
@@ -88,7 +89,10 @@ const EditPlan = () => {
                     }}
                 />
             </Form.Item>
-            <Form.Item name="is_active" label="Hiển thị" valuePropName="checked" initialValue={false}>
+            <Form.Item name="is_active" label="Hiển thị" valuePropName="checked" initialValue={!!detail.is_active}>
+                <Switch checkedChildren={true} unCheckedChildren={false}/>
+            </Form.Item>
+            <Form.Item name="is_vip" label="VIP" valuePropName="checked" initialValue={!!detail.is_vip}>
                 <Switch checkedChildren={true} unCheckedChildren={false}/>
             </Form.Item>
             <div className="form-bottom">

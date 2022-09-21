@@ -58,7 +58,8 @@ class PlanController extends Controller
             $formData['slug'] = Str::slug($formData['name']);
             $formData['user_id'] = auth('api')->user()->id;
             $formData['description'] = $formData['description'] ?? '';
-            $formData['is_active'] = $formData['is_active'] ?? '';
+            $formData['is_active'] = $formData['is_active'] ?? false;
+            $formData['is_vip'] = $formData['is_vip'] ?? false;
 
             $data = $this->planRepository->create($formData);
 

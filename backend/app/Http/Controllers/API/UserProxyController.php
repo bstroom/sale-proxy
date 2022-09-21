@@ -19,13 +19,17 @@ class UserProxyController extends Controller
 
     public function index(GetListProxyRequest $request): \Illuminate\Http\JsonResponse
     {
-        $result = $this->proxyRepository->getPremiumProxies($request->validated());
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 100);
+
+        $result = $this->proxyRepository->getPremiumProxies($request->validated(), $page, $limit);
 
         if ($result !== false) {
             return response()->json([
                 'status' => 'SUCCESS',
                 'statusCode' => 200,
-                'data' => $result
+                'data' => $result['list'],
+                'total' => $result['total']
             ]);
         }
 

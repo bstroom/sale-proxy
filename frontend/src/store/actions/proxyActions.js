@@ -32,9 +32,9 @@ export const clearListProxyAction = () => async (dispatch) => {
     })
 };
 
-export const getListGeoAction = () => async (dispatch) => {
+export const getListGeoAction = (isShowInActive = 0) => async (dispatch) => {
     try {
-        const { data } = await trackPromise(httpClient.get(`/geos`));
+        const { data } = await trackPromise(httpClient.get(`/geos?is_show_inactive=${isShowInActive}`));
         dispatch({
             type: GET_LIST_GEO_SUCCESS,
             payload: data,
@@ -44,6 +44,10 @@ export const getListGeoAction = () => async (dispatch) => {
     }
     finally {
     }
+};
+
+export const setActiveGeoItem = ({isActive, id}) => async (dispatch) => {
+    await trackPromise(httpClient.put(`/geos/${id}`, {is_active: isActive}));
 };
 
 

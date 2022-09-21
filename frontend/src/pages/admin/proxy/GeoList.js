@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Switch, Table} from 'antd';
-import {getListGeoAction} from "../../../store/actions/proxyActions";
+import {getListGeoAction, setActiveGeoItem} from "../../../store/actions/proxyActions";
 import {usePromiseTracker} from "react-promise-tracker";
 
 const ListGeo = () => {
@@ -9,10 +9,17 @@ const ListGeo = () => {
     const dispatch = useDispatch();
     const {promiseInProgress} = usePromiseTracker();
     
+    const onActiveChange = (id, isActive) => {
+        dispatch(setActiveGeoItem({
+            id,
+            isActive
+        }))
+    }
+    
     useEffect(() => {
-        dispatch(getListGeoAction());
+        dispatch(getListGeoAction(1));
     }, [dispatch]);
-
+    
     const columns = [
         {
             title: 'Quốc gia',
@@ -28,8 +35,8 @@ const ListGeo = () => {
             title: 'Trạng thái',
             dataIndex: 'is_active',
             key: 'is_active',
-            render(isActive) {
-                return <Switch checked={isActive}></Switch>;
+            render(isActive, fields) {
+                return <Switch defaultChecked={isActive} onChange={(v) => onActiveChange(fields.id, v)}></Switch>;
             }
         },
     ];

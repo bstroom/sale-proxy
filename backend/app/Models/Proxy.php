@@ -14,6 +14,7 @@ class Proxy extends Model
         'port',
         'geo_local',
         'ms',
-        'description'
+        'description',
+        'is_vip'
     ];
 }

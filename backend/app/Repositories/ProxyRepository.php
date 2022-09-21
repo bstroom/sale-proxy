@@ -27,6 +27,8 @@ class ProxyRepository extends Repository {
             $port = $ex[1] ?? '';
             $geo = $ex[2] ?? '';
             $ms = $ex[3] ?? '';
+            $isVip = $ex[4] ? true : false;
+
             if ($ip && $port && $geo && $ms) {
                 $importList[] = [
                     'ip' => $ip,
@@ -34,6 +36,7 @@ class ProxyRepository extends Repository {
                     'geo_local' => $geo,
                     'ms' => $ms,
                     'type' => $type,
+                    'is_vip' => $isVip,
                     'created_at' => Carbon::now()->toDateTime(),
                     'updated_at' => Carbon::now()->toDateTime()
                 ];
@@ -66,24 +69,33 @@ class ProxyRepository extends Repository {
     }
 
 
-    public function getPremiumProxies(array $data): bool | array
+    public function getPremiumProxies(array $data, $page = 1, $limit = 100): bool | array
     {
         if (!$order = $this->checkGetPremiumProxy($data)) {
             return false;
         }
 
         $orderPlan = $order->orderPlans->first();
+        $amount = $orderPlan->plan->amount;
+
         $condition = [];
         if ($orderPlan->geo_key !== 'ALL') {
             $condition['geo_local'] = $orderPlan->geo_key;
+            $condition['is_vip'] = $orderPlan->plan->is_vip;
         }
 
-        $list = Proxy::where($condition)
-            ->whereIn('type', explode(',', $orderPlan->proxy_type))
-            ->select('ip', 'port', 'geo_local', 'ms', 'type')
-            ->take($orderPlan->plan->amount);
+        $take = min($amount, $limit);
 
-        return $list->get()->toArray() ?? [];
+        $query = Proxy::where($condition)
+            ->whereIn('type', explode(',', $orderPlan->proxy_type))
+            ->select('ip', 'port', 'geo_local', 'ms', 'type', 'is_vip');
+
+        $list = $query->skip(($page - 1) * $take)->take($take);
+
+        return  [
+            'list' => $list->get()->toArray() ?? [],
+            'total' => min($query->take($amount)->count(), $amount)
+        ];
     }
 
     public function getSinglePremiumProxy(array $data): bool | array

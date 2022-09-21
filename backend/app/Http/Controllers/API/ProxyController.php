@@ -25,9 +25,13 @@ class ProxyController extends Controller
             $page = $request->get('page', 1);
             $limit = $request->get('limit', 100);
             $type = $request->get('type', 'HTTP');
+            $filterType = $request->get('filter_type', 'NORMAL');
 
-            $list = $this->proxyRepository->where(['type' => $type])->skip(($page - 1) * $limit)->take($limit)->get();
-            $total = $this->proxyRepository->where(['type' => $type])->count();
+
+
+            $list = $this->proxyRepository->where(['type' => $type, 'is_vip' => $filterType === 'VIP'])->skip(($page - 1) * $limit)->take($limit)->get();
+            $total = $this->proxyRepository->where(['type' => $type, 'is_vip' => $filterType === 'VIP' ])->count();
+
             return response()->json([
                 'status' => 'SUCCESS',
                 'statusCode' => 200,
