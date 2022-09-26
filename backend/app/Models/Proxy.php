@@ -15,6 +15,11 @@ class Proxy extends Model
         'geo_local',
         'ms',
         'description',
-        'is_vip'
+        'is_vip',
+        'status',
+        'username',
+        'password',
+        'ip_public',
+        'type',
     ];
 }

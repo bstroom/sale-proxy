@@ -21,8 +21,9 @@ class UserProxyController extends Controller
     {
         $page = $request->get('page', 1);
         $limit = $request->get('limit', 100);
+        $user = auth('api')->user();
 
-        $result = $this->proxyRepository->getPremiumProxies($request->validated(), $page, $limit);
+        $result = $this->proxyRepository->getPremiumProxies($request->validated(),$user, $page, $limit);
 
         if ($result !== false) {
             return response()->json([
@@ -45,8 +46,10 @@ class UserProxyController extends Controller
 
         }
 
+        $user = auth('api')->user();
+
         if ($type === 'single-proxy') {
-            $result = $this->proxyRepository->getSinglePremiumProxy($request->validated());
+            $result = $this->proxyRepository->getSinglePremiumProxy($request->validated(), $user);
 
             if ($result) {
                 return response()->json([

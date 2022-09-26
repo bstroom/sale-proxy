@@ -68,8 +68,27 @@ class ProxyRepository extends Repository {
         }
     }
 
+    public function importSingle(array $data)
+    {
+        $existed = $this->where(['ip' => $data['ip'], 'port' => $data['port']])->first();
 
-    public function getPremiumProxies(array $data, $page = 1, $limit = 100): bool | array
+        try {
+            if ($existed) {
+                $existed->update($data);
+                $existed->save();
+            } else {
+                $this->create($data);
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            Log::write('error', $e);
+            return false;
+        }
+    }
+
+
+    public function getPremiumProxies(array $data, $user,  $page = 1, $limit = 100): bool | array
     {
         if (!$order = $this->checkGetPremiumProxy($data)) {
             return false;
@@ -82,6 +101,10 @@ class ProxyRepository extends Repository {
         if ($orderPlan->geo_key !== 'ALL') {
             $condition['geo_local'] = $orderPlan->geo_key;
             $condition['is_vip'] = $orderPlan->plan->is_vip;
+        }
+
+        if (!$user) {
+            $condition['status'] = 'LIVE';
         }
 
         $take = min($amount, $limit);
@@ -98,7 +121,7 @@ class ProxyRepository extends Repository {
         ];
     }
 
-    public function getSinglePremiumProxy(array $data): bool | array
+    public function getSinglePremiumProxy(array $data, $user): bool | array
     {
         if (!$order = $this->checkGetPremiumProxy($data)) {
             return false;
@@ -108,6 +131,10 @@ class ProxyRepository extends Repository {
         $condition = [];
         if ($orderPlan->geo_key !== 'ALL') {
             $condition['geo_local'] = $orderPlan->geo_key;
+        }
+
+        if (!$user) {
+            $condition['status'] = 'LIVE';
         }
 
         $list = Proxy::where($condition)

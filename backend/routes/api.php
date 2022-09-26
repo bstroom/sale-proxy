@@ -11,6 +11,7 @@ use App\Http\Controllers\API\UserPaymentController;
 use App\Http\Controllers\API\BudgetController;
 use App\Http\Controllers\API\OrdersController;
 use App\Http\Controllers\API\ProxyController;
+use App\Http\Controllers\API\ApiProxyController;
 use App\Http\Controllers\API\ConfigController;
 use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\UserProxyController;
@@ -55,9 +56,10 @@ Route::group(['middleware' => ['jwt', 'json']], function() {
         Route::get('', 'index')->middleware(['jwt:admin']);
     });
 
-    Route::group(['prefix' => 'proxies', 'controller' => ProxyController ::class], function () {
-        Route::post('{type}', 'create')->middleware(['jwt:importer']);
-        Route::get('', 'index')->middleware(['jwt:admin']);
+    Route::group(['prefix' => 'proxies' ], function () {
+        Route::post('', [ApiProxyController ::class, 'create'])->middleware(['jwt:importer']);
+        Route::post('{type}', [ProxyController::class, 'create'])->middleware(['jwt:importer']);
+        Route::get('', [ProxyController::class, 'index'])->middleware(['jwt:admin']);
     });
 
 
