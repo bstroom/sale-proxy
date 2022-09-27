@@ -68,7 +68,7 @@ class ProxyRepository extends Repository {
         }
     }
 
-    public function importSingle(array $data)
+    public function importSingle(array $data): bool
     {
         $existed = $this->where(['ip' => $data['ip'], 'port' => $data['port']])->first();
 
@@ -86,6 +86,22 @@ class ProxyRepository extends Repository {
             return false;
         }
     }
+
+    public function updateOne(array $data, $id): bool
+    {
+        $existed = $this->find($id);
+
+        if (!$existed) {
+            return false;
+        }
+
+        $existed->update($data);
+        $existed->save();
+
+        return true;
+
+    }
+
 
 
     public function getPremiumProxies(array $data, $user,  $page = 1, $limit = 100): bool | array

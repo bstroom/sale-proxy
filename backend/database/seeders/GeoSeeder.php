@@ -24,7 +24,8 @@ class GeoSeeder extends Seeder
         foreach ($countries as $key => $value) {
             Geo::create([
                 "name" => $value->name,
-                "code" => $value->code
+                "code" => $value->code,
+                "is_active" => false
             ]);
         }
     }

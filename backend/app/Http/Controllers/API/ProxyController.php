@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProxyRequest;
+use App\Http\Requests\UpdateProxyRequest;
 use App\Repositories\ProxyRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -25,18 +26,24 @@ class ProxyController extends Controller
             $page = $request->get('page', 1);
             $limit = $request->get('limit', 100);
             $type = $request->get('type', 'HTTP');
+            $keyword = $request->get('keyword', null);
             $filterType = $request->get('filter_type', 'NORMAL');
 
+            $condition = ['type' => $type, 'is_vip' => $filterType === 'VIP'];
 
+            $list = $this->proxyRepository->where($condition)->skip(($page - 1) * $limit)->take($limit);
+            $total = $this->proxyRepository->where($condition);
 
-            $list = $this->proxyRepository->where(['type' => $type, 'is_vip' => $filterType === 'VIP'])->skip(($page - 1) * $limit)->take($limit)->get();
-            $total = $this->proxyRepository->where(['type' => $type, 'is_vip' => $filterType === 'VIP' ])->count();
+            if ($keyword) {
+                $list->where('ip', 'like', '%'.$keyword.'%');
+                $total->where('ip', 'like', '%'.$keyword.'%');
+            }
 
             return response()->json([
                 'status' => 'SUCCESS',
                 'statusCode' => 200,
-                'data' => $list,
-                'total' => $total,
+                'data' => $list->get(),
+                'total' => $total->count(),
             ]);
         } catch (\Exception $e) {
             Log::write($e);
@@ -80,8 +87,25 @@ class ProxyController extends Controller
 
             return response()->json([
                 'status' => 'SERVER ERROR',
-                'statusCode' => 400,
+                'statusCode' => 500,
             ], 500);
         }
+    }
+
+    public function edit(UpdateProxyRequest $request, $id)
+    {
+        $result = $this->proxyRepository->updateOne($request->validated(), $id);
+
+        if ($result) {
+            return response()->json([
+                'status' => 'SUCCESS',
+                'statusCode' => 200,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'ERROR',
+            'statusCode' => 400,
+        ], 400);
     }
 }

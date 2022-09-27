@@ -26,6 +26,15 @@ export const getListProxyAction = (params) => async (dispatch) => {
     }
 };
 
+export const updateProxyAction = (data) => async (dispatch) => {
+    try {
+        await trackPromise(httpClient.put(`/proxies/${data.id}`, data));
+    } catch (err) {
+        // localStorage.removeItem(TOKEN_KEY);
+    }
+};
+
+
 export const clearListProxyAction = () => async (dispatch) => {
     dispatch({
         type: CLEAR_PROXY_LIST
