@@ -102,8 +102,6 @@ class ProxyRepository extends Repository {
 
     }
 
-
-
     public function getPremiumProxies(array $data, $user,  $page = 1, $limit = 100): bool | array
     {
         if (!$order = $this->checkGetPremiumProxy($data)) {
@@ -127,7 +125,7 @@ class ProxyRepository extends Repository {
 
         $query = Proxy::where($condition)
             ->whereIn('type', explode(',', $orderPlan->proxy_type))
-            ->select('ip', 'port', 'geo_local', 'ms', 'type', 'is_vip');
+            ->select('ip', 'port', 'geo_local', 'ms', 'type', 'is_vip', 'username', 'password', 'status');
 
         $list = $query->skip(($page - 1) * $take)->take($take);
 

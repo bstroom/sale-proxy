@@ -26,11 +26,30 @@ export const getListProxyAction = (params) => async (dispatch) => {
     }
 };
 
-export const updateProxyAction = (data) => async (dispatch) => {
+export const updateProxyAction = (data, callback) => async (dispatch) => {
     try {
         await trackPromise(httpClient.put(`/proxies/${data.id}`, data));
+        if (callback) {
+            callback();
+        }
     } catch (err) {
-        // localStorage.removeItem(TOKEN_KEY);
+    }
+};
+
+export const exportProxyAction = (type) => async (dispatch) => {
+    try {
+        const data = await httpClient.get(`/proxies/export/${type}`, {
+            responseType: 'arraybuffer'
+        });
+
+
+        let blob = new Blob([data], { type: 'plain/txt' });
+        let link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = 'proxy.txt'
+        link.click()
+        
+    } catch (err) {
     }
 };
 

@@ -77,6 +77,16 @@ const UserProxy = () => {
             dataIndex: 'ms',
             key: '4',
         },
+        {
+            title: 'Username',
+            dataIndex: 'username',
+            key: 'username',
+        },
+        {
+            title: 'Password',
+            dataIndex: 'password',
+            key: 'password',
+        },
     ];
 
     return <>

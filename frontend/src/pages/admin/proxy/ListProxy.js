@@ -1,7 +1,12 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Input, Select, Switch, Table} from 'antd';
-import {clearListProxyAction, getListProxyAction, updateProxyAction} from "../../../store/actions/proxyActions";
+import {Button, Input, Select, Switch, Table} from 'antd';
+import {
+    clearListProxyAction,
+    exportProxyAction,
+    getListProxyAction,
+    updateProxyAction
+} from "../../../store/actions/proxyActions";
 import { Tabs } from 'antd';
 import React from 'react';
 import {debounce} from "../../../common/helpers";
@@ -16,7 +21,7 @@ const ListProxy = () => {
         type: DEFAULT_TAB_KEY,
         filter_type: 'NORMAL',
         page: 1,
-        limit: 10 ,
+        limit: 100,
         keyword: '',
     });
     
@@ -35,6 +40,10 @@ const ListProxy = () => {
             filter_type: v
         });
     }
+
+    const onExportProxy = () => {
+        dispatch(exportProxyAction(listParams.type))
+    }
     
     const onKeywordChange = debounce((e) => {
         dispatch(clearListProxyAction());
@@ -49,6 +58,8 @@ const ListProxy = () => {
         dispatch(updateProxyAction({
             ...fields,
             is_vip: v
+        }, () => {
+            dispatch(getListProxyAction(listParams));
         }));
     }
      
@@ -87,6 +98,24 @@ const ListProxy = () => {
             key: 'ms',
         },
         {
+            title: 'Username',
+            dataIndex: 'username',
+            key: 'username',
+        },
+        {
+            title: 'Password',
+            dataIndex: 'password',
+            key: 'password',
+        },
+        {
+            title: 'Live',
+            dataIndex: 'status',
+            key: 'status',
+            render(status) {
+                return status === 'LIVE' ? <span style={{color: 'green'}}>LIVE</span> : 'DIE'
+            }
+        },
+        {
             title: 'VIP Only',
             dataIndex: 'is_vip',
             key: 'is_vip',
@@ -106,6 +135,9 @@ const ListProxy = () => {
             </div>
             <div className="search-area">
                 <Input placeholder="Nhập ip tìm kiếm" onChange={onKeywordChange}/>
+            </div>
+            <div className="search-area">
+                <Button type="primary" onClick={onExportProxy}>Export All {listParams.type}</Button>
             </div>
         </div>
         <Tabs defaultActiveKey={DEFAULT_TAB_KEY} onChange={onTabChange}>
