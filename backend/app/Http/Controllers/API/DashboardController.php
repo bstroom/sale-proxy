@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\GeoRepository;
+use App\Repositories\OrderRepository;
 use App\Repositories\ProxyRepository;
 use App\Repositories\UserRepository;
 
@@ -12,15 +13,19 @@ class DashboardController extends Controller
     private UserRepository $userRepository;
     private ProxyRepository $proxyRepository;
     private GeoRepository $geoRepository;
+    private OrderRepository $orderRepository;
+
     public function __construct(
         UserRepository $userRepository,
         ProxyRepository $proxyRepository,
-        GeoRepository $geoRepository
+        GeoRepository $geoRepository,
+        OrderRepository $orderRepository
     )
     {
         $this->userRepository = $userRepository;
         $this->proxyRepository = $proxyRepository;
         $this->geoRepository = $geoRepository;
+        $this->orderRepository = $orderRepository;
     }
 
     public function index()
@@ -45,8 +50,16 @@ class DashboardController extends Controller
         foreach ($geos as $geo) {
             $totalByGeo = $this->proxyRepository->count(['geo_local' => $geo['code']]);
             if ($totalByGeo > 0) {
-                $count['total_by_geo_local'][strtolower($geo['code'])] = $totalByGeo;
+                $count['total_by_geo_local'][strtolower($geo['code'])] = [
+                    'count' => $totalByGeo,
+                    'label' => $geo['name']
+                ];
             }
+        }
+
+        $userOrders = null;
+        if (auth('api')->user()->role === 'ADMIN') {
+            $userOrders = $this->orderRepository->with(['orderPlans', 'user'])->orderBy('created_at', 'DESC')->take(5)->get();
         }
 
 
@@ -54,7 +67,8 @@ class DashboardController extends Controller
            'status' => 'SUCCESS',
            'statusCode' => 200,
            'data' => [
-                'count' => $count
+               'count' => $count,
+               'orders' => $userOrders
            ]
         ]);
     }

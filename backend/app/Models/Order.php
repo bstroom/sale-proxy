@@ -22,6 +22,11 @@ class Order extends Model
 
     public function orderPlans()
     {
-        return $this->hasMany(OrdersPlans::class, 'order_id', 'id');
+        return $this->hasMany(OrdersPlans::class, 'order_id', 'id')->with('plan');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

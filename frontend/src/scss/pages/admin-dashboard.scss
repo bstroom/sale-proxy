@@ -1,0 +1,21 @@
+.admin-dashboard {
+  display: flex;
+  column-gap: 20px;
+  flex-wrap: wrap;
+  align-items: stretch;
+  
+  table {
+    height: auto;
+    align-self:stretch;
+    tr {
+      vertical-align: top;
+    }
+    td {
+      padding-right: 20px;
+    }
+  }
+}
+
+.user-activities {
+  margin-top: 2rem;
+}

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class OrderRepository extends Repository {
+class  OrderRepository extends Repository {
     public function model(): string
     {
         return Order::class;

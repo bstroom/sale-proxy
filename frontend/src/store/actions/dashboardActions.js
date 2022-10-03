@@ -7,7 +7,7 @@ export const getDashboardAction = () => async (dispatch) => {
         const { data } = await httpClient.get(`/dashboard`);
         dispatch({
             type: GET_DASHBOARD_SUCCESS,
-            payload: data.count,
+            payload: data,
         });
     } catch (err) {
     }

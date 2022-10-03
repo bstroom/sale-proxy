@@ -1,5 +1,5 @@
 import {Modal, Button, Card, message, Skeleton, Switch, Tag, Select} from 'antd';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {getUserPlansAction} from "../../../store/actions/planActions";
 import {usePromiseTracker} from "react-promise-tracker";
@@ -71,7 +71,25 @@ const UserDashboard = () => {
         dispatch(getListGeoAction());
         dispatch(getDashboardAction());
     }, []);
-    
+
+    const totalByGeos = useMemo(() => {
+        if (count) {
+            return Object.entries(count.total_by_geo_local).reduce((acc, [key, item]) => {
+                const {length, [ length - 1 ]: last} = acc;
+                if (!last) {
+                    return [[{...item, key}]]
+                }
+
+                if (last.length < 5) {
+                    return [...acc, [...last, {...item, key}]];
+                } else {
+                    return [...acc, [{...item, key}]];
+                }
+            }, [])
+        } else {
+            return [];
+        }
+    }, [count])
     
     return <div>
         <div className="user-dashboard">
@@ -83,30 +101,36 @@ const UserDashboard = () => {
                             <p className="amount">{budget && budget?.amount_snap ? currencyFormat( budget?.amount_snap ||0, true) : '0đ'}</p>
                         </Skeleton>
                     </div>
-                    {count?.total_by_geo_local && <div className='information-wrapper'>
+                    {count && <div className='information-wrapper'>
                         <h4 className="text-center">Thống kê</h4>
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td>Tổng số proxy <strong>HTTP</strong> : </td>
-                                <td>{count?.total_http}</td>
-                            </tr>
-                            <tr>
-                                <td>Tổng số proxy <strong>SOCKS</strong> : </td>
-                                <td>{count?.total_socks}</td>
-                            </tr>
-                            <tr>
-                                <td>Tổng số proxy <strong>SSH</strong> : </td>
-                                <td>{count?.total_ssh}</td>
-                            </tr>
-                            {count?.total_by_geo_local && Object.entries(count.total_by_geo_local).map(([key, total]) => {
-                                return <tr>
-                                    <td>Tổng số proxy <strong>{key.toUpperCase()}</strong> : </td>
-                                    <td>{total}</td>
+                        <div className="information-content">
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td>Tổng số proxy <strong>HTTP</strong> : </td>
+                                    <td>{count?.total_http}</td>
                                 </tr>
+                                <tr>
+                                    <td>Tổng số proxy <strong>SOCKS</strong> : </td>
+                                    <td>{count?.total_socks}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tổng số proxy <strong>SSH</strong> : </td>
+                                    <td>{count?.total_ssh}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            {totalByGeos.map((group, index) => {
+                                return <table key={index}>
+                                    {group.map(item => {
+                                        return <tr key={item.key}>
+                                            <td>Tổng số proxy <strong>{item.label}</strong> : </td>
+                                            <td>{item.count}</td>
+                                        </tr>
+                                    })}
+                                </table>
                             })}
-                            </tbody>
-                        </table>
+                        </div>
                     </div>}
                 </div>
             </div>
