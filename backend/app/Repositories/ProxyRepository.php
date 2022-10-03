@@ -134,7 +134,7 @@ class ProxyRepository extends Repository {
             $condition['is_vip'] = $orderPlan->plan->is_vip;
         }
 
-        if (!$user) {
+        if (!$user || ($user && $user->role !== 'ADMIN')) {
             $condition['status'] = 'LIVE';
         }
 

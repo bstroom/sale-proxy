@@ -7,9 +7,12 @@
   table {
     height: auto;
     align-self:stretch;
+    max-width: 20%;
+    flex: 0 0 20%;
     tr {
       vertical-align: top;
     }
+    
     td {
       padding-right: 20px;
     }

@@ -15,29 +15,35 @@
       color: green;
     }
   }
-  .information-wrapper {
-    max-height: 200px;
-    overflow-y: auto;
-    
-    h4 {
-      text-decoration: underline;
-    }
+}
 
-    .information-content {;
-      display: flex;
-      column-gap: 20px;
-      flex-wrap: wrap;
-      align-items: stretch;
+.information-wrapper {
+  margin-top: 2rem;
+  border: 1px solid #efefef;
+  border-radius: 4px;
+  padding: 1rem;
+  
+  h4 {
+    text-decoration: underline;
+  }
 
-      table {
-        height: auto;
-        align-self:stretch;
-        tr {
-          vertical-align: top;
-        }
-        td {
-          padding-right: 20px;
-        }
+  .information-content {;
+    display: flex;
+    column-gap: 20px;
+    flex-wrap: wrap;
+    align-items: stretch;
+
+    table {
+      height: auto;
+      align-self:stretch;
+      max-width: 30%;
+      flex: 0 0 30%;
+
+      tr {
+        vertical-align: top;
+      }
+      td {
+        padding-right: 20px;
       }
     }
   }

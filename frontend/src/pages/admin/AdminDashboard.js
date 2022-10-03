@@ -19,9 +19,8 @@ const AdminDashboard = () => {
                 if (!last) {
                     return [[{...item, key}]]
                 }
-                
                 if (last.length < 5) {
-                    return [...acc, [...last, {...item, key}]];
+                    return [...acc.slice(0, length - 2), [...last, {...item, key}]];
                 } else {
                     return [...acc, [{...item, key}]];
                 }

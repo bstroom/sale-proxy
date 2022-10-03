@@ -81,7 +81,7 @@ const UserDashboard = () => {
                 }
 
                 if (last.length < 5) {
-                    return [...acc, [...last, {...item, key}]];
+                    return [...acc.slice(0, length - 2), [...last, {...item, key}]];
                 } else {
                     return [...acc, [{...item, key}]];
                 }
@@ -92,7 +92,7 @@ const UserDashboard = () => {
     }, [count])
     
     return <div>
-        <div className="user-dashboard">
+        <div className="user-dashboard">\
             <div className="budget">
                 <div className="card-box">
                     <div>
@@ -101,37 +101,6 @@ const UserDashboard = () => {
                             <p className="amount">{budget && budget?.amount_snap ? currencyFormat( budget?.amount_snap ||0, true) : '0đ'}</p>
                         </Skeleton>
                     </div>
-                    {count && <div className='information-wrapper'>
-                        <h4 className="text-center">Thống kê</h4>
-                        <div className="information-content">
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td>Tổng số proxy <strong>HTTP</strong> : </td>
-                                    <td>{count?.total_http}</td>
-                                </tr>
-                                <tr>
-                                    <td>Tổng số proxy <strong>SOCKS</strong> : </td>
-                                    <td>{count?.total_socks}</td>
-                                </tr>
-                                <tr>
-                                    <td>Tổng số proxy <strong>SSH</strong> : </td>
-                                    <td>{count?.total_ssh}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            {totalByGeos.map((group, index) => {
-                                return <table key={index}>
-                                    {group.map(item => {
-                                        return <tr key={item.key}>
-                                            <td>Tổng số proxy <strong>{item.label}</strong> : </td>
-                                            <td>{item.count}</td>
-                                        </tr>
-                                    })}
-                                </table>
-                            })}
-                        </div>
-                    </div>}
                 </div>
             </div>
             <div className="card-list">
@@ -181,6 +150,37 @@ const UserDashboard = () => {
                     })
                 }
             </div>
+            {count && <div className='information-wrapper'>
+                <h4 className="text-center">Thống kê</h4>
+                <div className="information-content">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>Tổng số proxy <strong>HTTP</strong> : </td>
+                            <td>{count?.total_http}</td>
+                        </tr>
+                        <tr>
+                            <td>Tổng số proxy <strong>SOCKS</strong> : </td>
+                            <td>{count?.total_socks}</td>
+                        </tr>
+                        <tr>
+                            <td>Tổng số proxy <strong>SSH</strong> : </td>
+                            <td>{count?.total_ssh}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    {totalByGeos.map((group, index) => {
+                        return <table key={index}>
+                            {group.map(item => {
+                                return <tr key={item.key}>
+                                    <td>Tổng số proxy <strong>{item.label}</strong> : </td>
+                                    <td>{item.count}</td>
+                                </tr>
+                            })}
+                        </table>
+                    })}
+                </div>
+            </div>}
         </div>
         <Modal 
             title="Xác nhận" 

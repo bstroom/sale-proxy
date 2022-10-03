@@ -83,7 +83,8 @@ export const getPremiumProxyActions = (key) => async (dispatch) => {
     try {
         const { data } = await trackPromise(httpClient.get(`/premium/list-proxy`, {
             params: {
-                key
+                key,
+                limit: 1000
             }
         }));
         
