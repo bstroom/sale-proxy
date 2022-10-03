@@ -94,7 +94,7 @@ class ProxyRepository extends Repository {
     {
 
         try {
-            foreach ($listdata as $data) {
+            foreach ($listdata['list'] as $data) {
                 $this->importSingle($data);
             }
             return true;
