@@ -1,9 +1,10 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button, message, Select, Table} from 'antd';
 import {usePromiseTracker} from "react-promise-tracker";
 import { useNavigate, useParams} from "react-router-dom";
 import {getListGeoAction, getPremiumProxyActions} from "../../../store/actions/proxyActions";
+import {format} from "date-fns";
 
 const UserProxy = () => {
     const premiums = useSelector(state => state.proxies.premiums);
@@ -86,6 +87,19 @@ const UserProxy = () => {
             title: 'Password',
             dataIndex: 'password',
             key: 'password',
+        },
+        {
+            title: 'Ip Public',
+            dataIndex: 'ip_public',
+            key: 'ip_public',
+        },
+        {
+            title: 'Cập nhật lần cuối',
+            dataIndex: 'updated_at',
+            key: 'updated_at',
+            render(updatedAt) {
+                return format(new Date(updatedAt), 'dd/mm/yyyy HH:mm:ss')
+            }
         },
     ];
 

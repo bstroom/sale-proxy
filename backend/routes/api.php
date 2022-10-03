@@ -85,7 +85,7 @@ Route::group(['middleware' => ['jwt', 'json']], function() {
         Route::get('{id}', 'show');
     });
     Route::group(['prefix' => 'dashboard', 'controller' => DashboardController::class], function () {
-        Route::get('', 'index')->middleware(['jwt:admin']);
+        Route::get('', 'index');
     });
 });
 

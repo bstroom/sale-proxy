@@ -12,25 +12,23 @@ const AdminDashboard = () => {
         <table>
             <tbody>
                 <tr>
-                    <td>Tổng số users: </td>
-                    <td>{count?.total_user}</td>
-                </tr>
-                <tr>
-                    <td>Tổng số proxy HTTP: </td>
+                    <td>Tổng số proxy <strong>HTTP</strong> : </td>
                     <td>{count?.total_http}</td>
                 </tr>
                 <tr>
-                    <td>Tổng số proxy SOCKS4: </td>
-                    <td>{count?.total_socks4}</td>
+                    <td>Tổng số proxy <strong>SOCKS</strong> : </td>
+                    <td>{count?.total_socks}</td>
                 </tr>
                 <tr>
-                    <td>Tổng số proxy SOCK5: </td>
-                    <td>{count?.total_socks5}</td>
-                </tr>
-                <tr>
-                    <td>Tổng số proxy SSH: </td>
+                    <td>Tổng số proxy <strong>SSH</strong> : </td>
                     <td>{count?.total_ssh}</td>
                 </tr>
+                {count?.total_by_geo_local && Object.entries(count?.total_by_geo_local).map(([key, total]) => {
+                    return <tr>
+                        <td>Tổng số proxy <strong>{key.toUpperCase()}</strong> : </td>
+                        <td>{total}</td>
+                    </tr>
+                })}
             </tbody>
         </table>
     </div>

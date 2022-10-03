@@ -71,8 +71,11 @@ class ProxyRepository extends Repository {
     public function importSingle(array $data): bool
     {
         $existed = $this->where(['ip' => $data['ip'], 'port' => $data['port']])->first();
-
         try {
+            if (!empty($data['ms']) && $data['ms']) {
+
+            }
+
             if ($existed) {
                 $existed->update($data);
                 $existed->save();
@@ -139,7 +142,8 @@ class ProxyRepository extends Repository {
 
         $query = Proxy::where($condition)
             ->whereIn('type', explode(',', $orderPlan->proxy_type))
-            ->select('ip', 'port', 'geo_local', 'ms', 'type', 'is_vip', 'username', 'password', 'status');
+            ->inRandomOrder()
+            ->select('ip', 'port', 'geo_local', 'ms', 'type', 'is_vip', 'username', 'password', 'status', 'ip_public', 'created_at', 'updated_at');
 
         $list = $query->skip(($page - 1) * $take)->take($take);
 
@@ -167,7 +171,7 @@ class ProxyRepository extends Repository {
 
         $list = Proxy::where($condition)
             ->whereIn('type', explode(',', $orderPlan->proxy_type))
-            ->select('ip', 'port', 'geo_local', 'ms', 'type')
+            ->select('ip', 'port', 'geo_local', 'ms', 'type', 'ip_public', 'created_at', 'updated_at')
             ->take($orderPlan->plan->amount)->get()->toArray();
 
         return $list[array_rand($list)];

@@ -10,6 +10,7 @@ import {
 import { Tabs } from 'antd';
 import React from 'react';
 import {debounce} from "../../../common/helpers";
+import {format} from "date-fns";
 const { TabPane } = Tabs;
 
 const DEFAULT_TAB_KEY = 'HTTP';
@@ -121,6 +122,19 @@ const ListProxy = () => {
             key: 'is_vip',
             render(isVip, fields) {
                 return <Switch defaultChecked={isVip} onChange={(v) => onUpdateVip(fields, v)}></Switch>
+            }
+        },
+        {
+            title: 'Ip Public',
+            dataIndex: 'ip_public',
+            key: 'ip_public'
+        },
+        {
+            title: 'Lastest Update',
+            dataIndex: 'updated_at',
+            key: 'updated_at',
+            render(updatedAt) {
+                return format(new Date(updatedAt), 'dd/mm/yyyy HH:mm:ss')
             }
         },
     ];

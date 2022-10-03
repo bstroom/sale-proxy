@@ -30,8 +30,8 @@ class EditPlanRequest extends FormRequest
             'type' => 'required|in:WEEK,MONTH,YEAR',
             'proxy_type' => 'required|array',
             'is_active' => 'boolean',
-            'description' => 'string',
-            'is_vip' => 'boolean'
+            'description' => 'string|nullable',
+            'is_vip' => 'boolean|nullable'
         ];
     }
 

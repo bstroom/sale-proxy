@@ -8,6 +8,7 @@ import {PLAN_TYPES} from "../../../common/contanst";
 import {getBudgetAction} from "../../../store/actions/paymentActions";
 import {orderAction} from "../../../store/actions/orderActions";
 import {getListGeoAction} from "../../../store/actions/proxyActions";
+import {getDashboardAction} from "../../../store/actions/dashboardActions";
 
 const { Meta } = Card;
 
@@ -15,6 +16,7 @@ const { Meta } = Card;
 const UserDashboard = () => {
     const { promiseInProgress } = usePromiseTracker();
     const dispatch = useDispatch();
+    const count = useSelector(state => state.dashboard.count);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [local, setLocal] = useState('ALL');
     const planList = useSelector((state) => state.plans.userList);
@@ -67,6 +69,7 @@ const UserDashboard = () => {
         dispatch(getUserPlansAction());
         dispatch(getBudgetAction());
         dispatch(getListGeoAction());
+        dispatch(getDashboardAction());
     }, []);
     
     
@@ -74,10 +77,37 @@ const UserDashboard = () => {
         <div className="user-dashboard">
             <div className="budget">
                 <div className="card-box">
-                    <Skeleton loading={!budget} active>
-                        <h3>Số dư hiện tại</h3>
-                        <p className="amount">{budget && budget?.amount_snap ? currencyFormat( budget?.amount_snap ||0, true) : '0đ'}</p>
-                    </Skeleton>
+                    <div>
+                        <Skeleton loading={!budget} active>
+                            <h3>Số dư hiện tại</h3>
+                            <p className="amount">{budget && budget?.amount_snap ? currencyFormat( budget?.amount_snap ||0, true) : '0đ'}</p>
+                        </Skeleton>
+                    </div>
+                    {count?.total_by_geo_local && <div className='information-wrapper'>
+                        <h4 className="text-center">Thống kê</h4>
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td>Tổng số proxy <strong>HTTP</strong> : </td>
+                                <td>{count?.total_http}</td>
+                            </tr>
+                            <tr>
+                                <td>Tổng số proxy <strong>SOCKS</strong> : </td>
+                                <td>{count?.total_socks}</td>
+                            </tr>
+                            <tr>
+                                <td>Tổng số proxy <strong>SSH</strong> : </td>
+                                <td>{count?.total_ssh}</td>
+                            </tr>
+                            {count?.total_by_geo_local && Object.entries(count.total_by_geo_local).map(([key, total]) => {
+                                return <tr>
+                                    <td>Tổng số proxy <strong>{key.toUpperCase()}</strong> : </td>
+                                    <td>{total}</td>
+                                </tr>
+                            })}
+                            </tbody>
+                        </table>
+                    </div>}
                 </div>
             </div>
             <div className="card-list">
