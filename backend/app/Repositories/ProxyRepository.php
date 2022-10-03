@@ -139,7 +139,9 @@ class ProxyRepository extends Repository {
             $condition['status'] = 'LIVE';
         }
 
-        $proxiesIds = $orderPlan->proxiesId->toArray();
+        $proxiesIds = $orderPlan->proxiesId->map(function($i) {
+            return $i['proxy_id'];
+        })->toArray();
         $take = min($amount, $limit);
 
         $query = Proxy::whereIn('id', $proxiesIds)
@@ -149,9 +151,9 @@ class ProxyRepository extends Repository {
         if ($query->count() < $amount) {
             $deadProxies = Proxy::whereIn('id', $proxiesIds)
                 ->where(['status' => 'NONE']);
-            $countDie = $deadProxies->count();
+            $countDie = $amount - $deadProxies->count() - $query->count();
 
-            $deadProxies->delete();
+            OrderProxies::destroy($deadProxies->select('id')->get()->toArray());
 
             $listReplace = Proxy::where($condition)
                 ->whereIn('type', explode(',', $orderPlan->proxy_type))
