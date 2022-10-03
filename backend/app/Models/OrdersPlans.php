@@ -36,4 +36,9 @@ class OrdersPlans extends Model
     {
         return $this->belongsTo(Order::class, 'order_id', 'id');
     }
+
+    public function proxiesId()
+    {
+        return $this->hasMany(OrderProxies::class, 'orders_plans_id', 'id')->select('proxy_id');
+    }
 }

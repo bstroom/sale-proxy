@@ -5,8 +5,10 @@ use App\Models\Budget;
 use App\Models\Key;
 use App\Models\Order;
 use App\Models\OrdersPlans;
+use App\Models\OrderProxies;
 use App\Models\PaymentHistory;
 use App\Models\Plan;
+use App\Models\Proxy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -75,6 +77,26 @@ class  OrderRepository extends Repository {
 
             $budget->amount_snap = $this->replayAmountSnap($budget, $userId);
             $budget->save();
+
+            $condition = [];
+
+            if ($data['geo_key'] !== 'ALL') {
+                $condition['geo_local'] = $orderPlan->geo_key;
+            }
+            $condition['is_vip'] = $orderPlan->plan->is_vip;
+            $condition['status'] = 'LIVE';
+
+            $liveProxies = Proxy::where($condition)->inRandomOrder()->whereIn('type', explode(',', $plan->proxy_type))->take($plan->amount)->get()->map(function($item) use($orderPlan) {
+                return [
+                    'orders_plans_id' => $orderPlan->id,
+                    'proxy_id' => $item->id,
+                ];
+            })->toArray();
+
+            foreach (array_chunk($liveProxies,1000, true) as $t)
+            {
+                OrderProxies::insert($t);
+            }
 
             DB::commit();
             return true;

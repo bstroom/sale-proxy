@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\Models\Key;
 use App\Models\Order;
+use App\Models\OrderProxies;
 use App\Models\Proxy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -138,17 +139,47 @@ class ProxyRepository extends Repository {
             $condition['status'] = 'LIVE';
         }
 
+        $proxiesIds = $orderPlan->proxiesId->toArray();
         $take = min($amount, $limit);
 
-        $query = Proxy::where($condition)
-            ->whereIn('type', explode(',', $orderPlan->proxy_type))
-            ->inRandomOrder()
+        $query = Proxy::whereIn('id', $proxiesIds)
+            ->where(['status' => 'LIVE'])
             ->select('ip', 'port', 'geo_local', 'ms', 'type', 'is_vip', 'username', 'password', 'status', 'ip_public', 'created_at', 'updated_at');
+
+        if ($query->count() < $amount) {
+            $deadProxies = Proxy::whereIn('id', $proxiesIds)
+                ->where(['status' => 'NONE']);
+            $countDie = $deadProxies->count();
+
+            $deadProxies->delete();
+
+            $listReplace = Proxy::where($condition)
+                ->whereIn('type', explode(',', $orderPlan->proxy_type))
+                ->select('id', 'ip', 'port', 'geo_local', 'ms', 'type', 'is_vip', 'username', 'password', 'status', 'ip_public', 'created_at', 'updated_at')
+                ->take($countDie)->get()->map(function($proxy) use($orderPlan) {
+                    return [
+                        'orders_plans_id' => $orderPlan->id,
+                        'proxy_id' => $proxy['id'],
+                    ];
+                })->toArray();
+
+            foreach (array_chunk($listReplace,1000, true) as $t)
+            {
+                $proxiesIds = $proxiesIds + array_map(function ($item) {
+                    return $item['proxy_id'];
+                    }, $t);
+                OrderProxies::insert($t);
+            };
+
+            $query = Proxy::whereIn('id', $proxiesIds)
+                ->where(['status' => 'LIVE'])
+                ->select('ip', 'port', 'geo_local', 'ms', 'type', 'is_vip', 'username', 'password', 'status', 'ip_public', 'created_at', 'updated_at');
+        }
 
         $list = $query->skip(($page - 1) * $take)->take($take);
 
         return  [
-            'list' => $list->get()->toArray() ?? [],
+            'list' => $list->get()->toArray(),
             'total' => min($query->take($amount)->count(), $amount)
         ];
     }
