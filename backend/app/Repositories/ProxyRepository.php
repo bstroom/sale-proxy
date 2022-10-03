@@ -87,6 +87,20 @@ class ProxyRepository extends Repository {
         }
     }
 
+    public function importMultiple(array $listdata): bool
+    {
+
+        try {
+            foreach ($listdata as $data) {
+                $this->importSingle($data);
+            }
+            return true;
+        } catch (\Exception $e) {
+            Log::write('error', $e);
+            return false;
+        }
+    }
+
     public function updateOne(array $data, $id): bool
     {
         $existed = $this->find($id);

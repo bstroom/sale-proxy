@@ -59,6 +59,7 @@ Route::group(['middleware' => ['jwt', 'json']], function() {
 
     Route::group(['prefix' => 'proxies' ], function () {
         Route::post('', [ApiProxyController ::class, 'create'])->middleware(['jwt:importer']);
+        Route::post('list', [ApiProxyController ::class, 'createMultiple'])->middleware(['jwt:importer']);
         Route::post('{type}', [ProxyController::class, 'create'])->middleware(['jwt:importer']);
         Route::put('{id}', [ProxyController::class, 'edit'])->middleware(['jwt:admin']);
         Route::get('', [ProxyController::class, 'index'])->middleware(['jwt:admin']);
