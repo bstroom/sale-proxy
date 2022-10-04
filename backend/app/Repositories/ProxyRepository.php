@@ -229,4 +229,21 @@ class ProxyRepository extends Repository {
 
         return $order;
     }
+
+    public function destroy($id): bool
+    {
+        try {
+            DB::beginTransaction();
+
+            $this->delete($id);
+            OrderProxies::destroy([$id]);
+
+            DB::commit();
+
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+    }
 }

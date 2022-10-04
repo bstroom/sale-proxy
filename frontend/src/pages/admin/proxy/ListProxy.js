@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Button, Input, Select, Switch, Table} from 'antd';
 import {
-    clearListProxyAction,
+    clearListProxyAction, deleteProxy,
     exportProxyAction,
     getListProxyAction,
     updateProxyAction
@@ -24,6 +24,7 @@ const ListProxy = () => {
         page: 1,
         limit: 100,
         keyword: '',
+        status: 'ALL',
     });
     
     const handleTableChange = (page) => {
@@ -41,6 +42,15 @@ const ListProxy = () => {
             filter_type: v
         });
     }
+
+    const onStatusChange = (v) => {
+        setListParams({
+            ...listParams,
+            status: v
+        });
+    }
+
+    
 
     const onExportProxy = () => {
         dispatch(exportProxyAction(listParams.type))
@@ -134,9 +144,17 @@ const ListProxy = () => {
             dataIndex: 'updated_at',
             key: 'updated_at',
             render(updatedAt) {
-                return format(new Date(updatedAt), 'dd/mm/yyyy HH:mm:ss')
+                return format(new Date(updatedAt), 'yyyy/MM/dd HH:mm:ss')
             }
         },
+        {
+            title: '',
+            dataIndex: 'action',
+            key: 'action',
+            render(_, fields) {
+                return <Button type="primary" danger onClick={() => dispatch(deleteProxy(fields.id))}>Xóa</Button>
+            }
+        }
     ];
 
     return <>
@@ -145,6 +163,13 @@ const ListProxy = () => {
                 <Select style={{width: '250px'}} value={listParams.filter_type} onChange={onFilterTypeChange}>
                     <Select.Option value="NORMAL">Loại proxy: Bình thường</Select.Option>
                     <Select.Option value="VIP">Loại proxy: VIP</Select.Option>
+                </Select>
+            </div>
+            <div>
+                <Select style={{width: '250px', marginLeft: '1rem'}} value={listParams.status} onChange={onStatusChange}>
+                    <Select.Option value="ALL">Tình trạng: ALL</Select.Option>
+                    <Select.Option value="LIVE">Tình trạng: LIVE</Select.Option>
+                    <Select.Option value="NONE">Tình trạng: DIE</Select.Option>
                 </Select>
             </div>
             <div className="search-area">

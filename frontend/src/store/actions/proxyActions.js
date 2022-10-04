@@ -3,6 +3,7 @@ import httpClient from "../../services/httpClient";
 export const GET_LIST_PROXY_SUCCESS = 'GET_LIST_PROXY_SUCCESS';
 export const GET_LIST_GEO_SUCCESS = 'GET_LIST_GEO_SUCCESS';
 export const CREATE_PROXY_SUCCESS = 'CREATE_PROXY_SUCCESS';
+export const DELETE_PROXY_SUCCESS = 'DELETE_PROXY_SUCCESS';
 export const GET_PREMIUM_PROXY_SUCCESS = 'GET_PREMIUM_PROXY_SUCCESS';
 export const CLEAR_PROXY_LIST = 'CLEAR_PROXY_LIST';
 
@@ -16,7 +17,7 @@ export const getListProxyAction = (params) => async (dispatch) => {
             payload: {
                 data,
                 total,
-                type: params.type
+                type: params.type,
             },
         });
     } catch (err) {
@@ -76,6 +77,14 @@ export const getListGeoAction = (isShowInActive = 0) => async (dispatch) => {
 
 export const setActiveGeoItem = ({isActive, id}) => async (dispatch) => {
     await trackPromise(httpClient.put(`/geos/${id}`, {is_active: isActive}));
+};
+
+export const deleteProxy = (id) => async (dispatch) => {
+    await  httpClient.delete(`/proxies/${id}`);
+    dispatch({
+        type: DELETE_PROXY_SUCCESS,
+        payload: id
+    })
 };
 
 

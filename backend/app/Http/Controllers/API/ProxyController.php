@@ -27,11 +27,17 @@ class ProxyController extends Controller
             $limit = $request->get('limit', 100);
             $type = $request->get('type', 'HTTP');
             $keyword = $request->get('keyword', null);
+            $status = $request->get('status', 'ALL');
+
             $filterType = $request->get('filter_type', 'NORMAL');
 
             $condition = ['type' => $type, 'is_vip' => $filterType === 'VIP'];
 
-            $list = $this->proxyRepository->where($condition)->skip(($page - 1) * $limit)->take($limit);
+            if ($status !== 'ALL') {
+                $condition['status'] = $status;
+            }
+
+            $list = $this->proxyRepository->where($condition)->orderBy('updated_at', 'DESC')->skip(($page - 1) * $limit)->take($limit);
             $total = $this->proxyRepository->where($condition);
 
             if ($keyword) {
@@ -95,6 +101,23 @@ class ProxyController extends Controller
     public function edit(UpdateProxyRequest $request, $id)
     {
         $result = $this->proxyRepository->updateOne($request->validated(), $id);
+
+        if ($result) {
+            return response()->json([
+                'status' => 'SUCCESS',
+                'statusCode' => 200,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'ERROR',
+            'statusCode' => 400,
+        ], 400);
+    }
+
+    public function delete($id)
+    {
+        $result = $this->proxyRepository->destroy($id);
 
         if ($result) {
             return response()->json([

@@ -1,5 +1,5 @@
 import {
-    CLEAR_PROXY_LIST,
+    CLEAR_PROXY_LIST, DELETE_PROXY_SUCCESS,
     GET_LIST_GEO_SUCCESS,
     GET_LIST_PROXY_SUCCESS,
     GET_PREMIUM_PROXY_SUCCESS,
@@ -31,6 +31,14 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 premiums: action.payload
+            }
+        case DELETE_PROXY_SUCCESS:
+            return {
+                ...state,
+                list: {
+                    ...state.list,
+                    data: state.list.data.filter(({id}) => id !== action.payload),
+                }
             }
         case CLEAR_PROXY_LIST:
             return {

@@ -26,7 +26,6 @@ class ExportProxyController extends Controller
         $query = $this->proxyRepository->where(['type' => $type]);
         $total = $query->count();
         $count = $query->count();
-        $pid = getmypid();
 
         $page = 1;
 
@@ -34,7 +33,7 @@ class ExportProxyController extends Controller
             $data = $query->take(100)->skip(($page - 1) * 100)->get();
 
             foreach ($data as $item) {
-                Storage::append($fileName,"{$item['ip']}|{$item['port']}|{$item['geo_local']}|{$item['ms']}|{$item['status']}");
+                Storage::append($fileName,"{$item['ip']}:{$item['port']}:{$item['username']}:{$item['password']}:{$item['geo_local']}|{$item['ms']}");
             }
 
             $page += 1;
