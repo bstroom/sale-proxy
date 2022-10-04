@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProxyRequest;
+use App\Http\Requests\DeleteProxiesRequest;
 use App\Http\Requests\UpdateProxyRequest;
 use App\Repositories\ProxyRepository;
 use Illuminate\Support\Facades\DB;
@@ -115,9 +116,9 @@ class ProxyController extends Controller
         ], 400);
     }
 
-    public function delete($id)
+    public function delete(DeleteProxiesRequest $request)
     {
-        $result = $this->proxyRepository->destroy($id);
+        $result = $this->proxyRepository->destroy($request->validated());
 
         if ($result) {
             return response()->json([

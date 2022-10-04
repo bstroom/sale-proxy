@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Button, Input, Select, Switch, Table} from 'antd';
+import {Button, Checkbox, Input, Select, Switch, Table} from 'antd';
 import {
     clearListProxyAction, deleteProxy,
     exportProxyAction,
@@ -11,6 +11,7 @@ import { Tabs } from 'antd';
 import React from 'react';
 import {debounce} from "../../../common/helpers";
 import {format} from "date-fns";
+import {CheckOutlined, CloseOutlined} from "@ant-design/icons";
 const { TabPane } = Tabs;
 
 const DEFAULT_TAB_KEY = 'HTTP';
@@ -26,6 +27,8 @@ const ListProxy = () => {
         keyword: '',
         status: 'ALL',
     });
+    const [selectedList, setSelectedList] = useState([]);
+    const [deleteLoading, setDeleteLoading] = useState(false);
     
     const handleTableChange = (page) => {
         dispatch(clearListProxyAction());
@@ -49,8 +52,33 @@ const ListProxy = () => {
             status: v
         });
     }
-
     
+    const onCheckSelectChange = (id) => {
+        if (selectedList.includes(id)) {
+            setSelectedList(selectedList.filter(_id => _id !== id));
+        } else {
+            setSelectedList([...selectedList, id]);
+        }
+    }
+
+    const handleSelect = () => {
+        if (proxyMetadata.data?.length) {
+            if (selectedList.length) {
+                setSelectedList([]);
+            } else {
+                setSelectedList(proxyMetadata.data.map(({id}) => id));
+            }
+        }
+    }
+    
+    const deleteSelect = () => {
+        setDeleteLoading(true);
+        dispatch(deleteProxy(selectedList, () => {
+            dispatch(getListProxyAction(listParams))
+            setSelectedList([]);
+            setDeleteLoading(false);
+        }))
+    }
 
     const onExportProxy = () => {
         dispatch(exportProxyAction(listParams.type))
@@ -152,7 +180,7 @@ const ListProxy = () => {
             dataIndex: 'action',
             key: 'action',
             render(_, fields) {
-                return <Button type="primary" danger onClick={() => dispatch(deleteProxy(fields.id))}>Xóa</Button>
+                return <Checkbox onChange={() => onCheckSelectChange(fields.id)} checked={selectedList.includes(fields.id)} />
             }
         }
     ];
@@ -176,7 +204,29 @@ const ListProxy = () => {
                 <Input placeholder="Nhập ip tìm kiếm" onChange={onKeywordChange}/>
             </div>
             <div className="search-area">
-                <Button type="primary" onClick={onExportProxy}>Export All {listParams.type}</Button>
+                <Button 
+                    type="primary" 
+                    onClick={onExportProxy}
+                    disabled={deleteLoading}
+                    loading={deleteLoading}
+                >Export All {listParams.type}</Button>
+            </div>
+            <div className="search-area">
+                <Button 
+                    type="primary" 
+                    icon={!selectedList.length ? <CheckOutlined /> : <CloseOutlined />} 
+                    onClick={handleSelect}
+                    disabled={deleteLoading}
+                    loading={deleteLoading}
+                > {selectedList.length ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}</Button>
+                {!!selectedList.length && <Button 
+                    style={{marginLeft: '1rem'}} 
+                    type="primary" onClick={onExportProxy} 
+                    danger 
+                    onClick={deleteSelect}
+                    disabled={deleteLoading}
+                    loading={deleteLoading}
+                >Xóa {selectedList.length} proxies</Button>}
             </div>
         </div>
         <Tabs defaultActiveKey={DEFAULT_TAB_KEY} onChange={onTabChange}>

@@ -79,12 +79,13 @@ export const setActiveGeoItem = ({isActive, id}) => async (dispatch) => {
     await trackPromise(httpClient.put(`/geos/${id}`, {is_active: isActive}));
 };
 
-export const deleteProxy = (id) => async (dispatch) => {
-    await  httpClient.delete(`/proxies/${id}`);
-    dispatch({
-        type: DELETE_PROXY_SUCCESS,
-        payload: id
-    })
+export const deleteProxy = (ids, callback) => async (dispatch) => {
+    await  httpClient.post(`/proxies/delete`, {
+        list: ids
+    });
+    if (callback) {
+        callback();
+    }
 };
 
 

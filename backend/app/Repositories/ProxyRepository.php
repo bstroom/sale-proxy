@@ -230,13 +230,14 @@ class ProxyRepository extends Repository {
         return $order;
     }
 
-    public function destroy($id): bool
+    public function destroy($data): bool
     {
         try {
             DB::beginTransaction();
 
-            $this->delete($id);
-            OrderProxies::destroy([$id]);
+            Proxy::destroy($data['list']);
+            $orderProxiesId = array_column(OrderProxies::where(['proxy_id' => $data['list']])->select('id')->get()->toArray(), 'id');
+            OrderProxies::destroy($orderProxiesId);
 
             DB::commit();
 

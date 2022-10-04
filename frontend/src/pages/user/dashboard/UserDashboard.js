@@ -92,7 +92,7 @@ const UserDashboard = () => {
     }, [count])
     
     return <div>
-        <div className="user-dashboard">\
+        <div className="user-dashboard">
             <div className="budget">
                 <div className="card-box">
                     <div>
