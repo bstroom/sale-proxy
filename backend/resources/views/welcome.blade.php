@@ -8,7 +8,7 @@
     <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="{{asset('build/logo192.png')}}" />
     <link rel="manifest" href="{{asset('build/manifest.json')}}" />
-    <title>Proxy Quốc tế</title>
+    <title>1Proxy.net | Proxy VN & Quốc tế</title>
     <script defer="defer" src="{{asset('build/static/js/main.js?v=').env('RESOURCE_VER')}}"></script>
     <link href="{{asset('build/static/css/main.css?v='.env('RESOURCE_VER'))}}" rel="stylesheet">
 </head>

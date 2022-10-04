@@ -15,7 +15,7 @@ const Header = () => {
         <div className="header-inner">
             <div className="header-left">
                 <Link to='/'>
-                    <h1>Proxylist.fun</h1>
+                    <h1>1Proxy.net</h1>
                 </Link>
             </div>
             <div className="header-right">
