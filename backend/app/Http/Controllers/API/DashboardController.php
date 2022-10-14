@@ -59,7 +59,7 @@ class DashboardController extends Controller
 
         $count['total_by_geo_local']['unknown'] = [
             'label' => 'Chưa xác định',
-            'count' => $this->proxyRepository->whereNull('geo_local')->count()
+            'count' => $this->proxyRepository->whereNull('geo_local')->orWhere(['geo_local' => 'Null'])->count()
         ];
 
         $userOrders = null;
