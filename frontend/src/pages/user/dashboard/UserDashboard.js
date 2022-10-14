@@ -107,45 +107,47 @@ const UserDashboard = () => {
                 {
                     planList.map((plan) => {
                         return  (
-                            <Card
-                                style={{ width: 300, marginTop: 16 }}
-                                actions={[
-                                    <Button 
-                                        onClick={() => showModal(plan)} 
-                                        loading={promiseInProgress} type="primary" key="buy"
-                                    >Mua ngay</Button>,
-                                ]}
-                                key={plan.id}
-                            >
-                                <Skeleton loading={!planList.length} active>
-                                    <Meta
-                                        title={<h3 className="text-center">{plan.name}</h3>}
-                                        description={<div className="plan-description">
-                                            <p dangerouslySetInnerHTML={{ __html: plan.description }}></p>
-                                            <p className="price">{currencyFormat(plan.price, true) + ' / ' + PLAN_TYPES[plan.type]}</p>
-                                        <div>
-                                            {
-                                                plan.proxy_type.split(',').map((type) => {
-                                                    let color = 'geekblue';
-                                                    if (type === 'SOCKS4') {
-                                                        color='green';
-                                                    }
-                                                    if (type === 'SOCKS5') {
-                                                        color = 'volcano'
-                                                    }
-                                                    if (type === 'SSH') {
-                                                        color = 'yellow'
-                                                    }
-                                                    return <Tag color={color} key={type}>
-                                                        {type}
-                                                    </Tag>
-                                                })
-                                            }
-                                        </div>
-                                    </div>}
-                                    />
-                                </Skeleton>
-                            </Card>
+                            <div className="card-wrap">
+                                <Card
+                                    style={{ width: 300, marginTop: 16 }}
+                                    actions={[
+                                        <Button 
+                                            onClick={() => showModal(plan)} 
+                                            loading={promiseInProgress} type="primary" key="buy"
+                                        >Mua ngay</Button>,
+                                    ]}
+                                    key={plan.id}
+                                >
+                                    <Skeleton loading={!planList.length} active>
+                                        <Meta
+                                            title={<h3 className="text-center">{plan.name}</h3>}
+                                            description={<div className="plan-description">
+                                                <p dangerouslySetInnerHTML={{ __html: plan.description }}></p>
+                                                {!!plan.price && <p className="price">{currencyFormat(plan.price, true) + ' / ' + PLAN_TYPES[plan.type]}</p>}
+                                            <div>
+                                                {
+                                                    plan.proxy_type.split(',').map((type) => {
+                                                        let color = 'geekblue';
+                                                        if (type === 'SOCKS4') {
+                                                            color='green';
+                                                        }
+                                                        if (type === 'SOCKS5') {
+                                                            color = 'volcano'
+                                                        }
+                                                        if (type === 'SSH') {
+                                                            color = 'yellow'
+                                                        }
+                                                        return <Tag color={color} key={type}>
+                                                            {type}
+                                                        </Tag>
+                                                    })
+                                                }
+                                            </div>
+                                        </div>}
+                                        />
+                                    </Skeleton>
+                                </Card>
+                            </div>
                         )
                     })
                 }
@@ -156,15 +158,15 @@ const UserDashboard = () => {
                     <table>
                         <tbody>
                         <tr>
-                            <td>Tổng số proxy <strong>HTTP</strong> : </td>
+                            <td>Proxy <strong>HTTP</strong> : </td>
                             <td>{count?.total_http}</td>
                         </tr>
                         <tr>
-                            <td>Tổng số proxy <strong>SOCKS</strong> : </td>
+                            <td>Proxy <strong>SOCKS</strong> : </td>
                             <td>{count?.total_socks}</td>
                         </tr>
                         <tr>
-                            <td>Tổng số proxy <strong>SSH</strong> : </td>
+                            <td>Proxy <strong>SSH</strong> : </td>
                             <td>{count?.total_ssh}</td>
                         </tr>
                         </tbody>
@@ -174,7 +176,7 @@ const UserDashboard = () => {
                             <tbody>
                                 {group.map(item => {
                                     return <tr key={item.key}>
-                                        <td>Tổng số proxy <strong>{item.label}</strong> : </td>
+                                        <td>Proxy <strong>{item.label}</strong> : </td>
                                         <td>{item.count}</td>
                                     </tr>
                                 })}

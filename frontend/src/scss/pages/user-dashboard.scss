@@ -44,6 +44,9 @@
       }
       td {
         padding-right: 20px;
+        &:last-child {
+          text-align: right;
+        }
       }
     }
   }
@@ -53,7 +56,21 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  align-items: flex-start;
+  align-items: stretch;
+  .card-wrap {
+    min-height: 100%;
+  }
+  .ant-card {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    .ant-card-body {
+      flex: 1;
+    }
+    .ant-card-actions {
+      max-height: 58px;
+    }
+  }
 }
 
 

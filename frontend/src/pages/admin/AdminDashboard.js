@@ -38,15 +38,15 @@ const AdminDashboard = () => {
             <table>
                 <tbody>
                     <tr>
-                        <td>Tổng số proxy <strong>HTTP</strong> : </td>
+                        <td>Proxy <strong>HTTP</strong> : </td>
                         <td>{count?.total_http}</td>
                     </tr>
                     <tr>
-                        <td>Tổng số proxy <strong>SOCKS</strong> : </td>
+                        <td>Proxy <strong>SOCKS</strong> : </td>
                         <td>{count?.total_socks}</td>
                     </tr>
                     <tr>
-                        <td>Tổng số proxy <strong>SSH</strong> : </td>
+                        <td>Proxy <strong>SSH</strong> : </td>
                         <td>{count?.total_ssh}</td>
                     </tr>
                 </tbody>
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
                     <tbody>
                         {group.map(item => {
                             return <tr key={item.key}>
-                                <td>Tổng số proxy <strong>{item.label}</strong> : </td>
+                                <td>Proxy <strong>{item.label}</strong> : </td>
                                 <td>{item.count}</td>
                             </tr>
                         })}
