@@ -57,6 +57,11 @@ class DashboardController extends Controller
             }
         }
 
+        $count['total_by_geo_local']['unknown'] = [
+            'label' => 'Chưa xác định',
+            'count' => $this->proxyRepository->whereNull('geo_local')->count()
+        ];
+
         $userOrders = null;
         if (auth('api')->user()->role === 'ADMIN') {
             $userOrders = $this->orderRepository->with(['orderPlans', 'user'])->orderBy('created_at', 'DESC')->take(5)->get();
