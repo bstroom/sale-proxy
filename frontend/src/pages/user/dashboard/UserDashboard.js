@@ -74,21 +74,21 @@ const UserDashboard = () => {
 
     const totalByGeos = useMemo(() => {
         if (count) {
-            return Object.entries(count.total_by_geo_local).reduce((acc, [key, item]) => {
+            const groups = Object.entries(count?.total_by_geo_local).reduce((acc, [key, item]) => {
                 const {length, [ length - 1 ]: last} = acc;
                 if (!last) {
                     return [[{...item, key}]]
                 }
-
                 if (last.length < 5) {
-                    return [...acc.slice(0, length - 2), [...last, {...item, key}]];
+                    return [...acc.slice(0, length - 1), [...last, {...item, key}]];
                 } else {
                     return [...acc, [{...item, key}]];
                 }
             }, [])
-        } else {
-            return [];
+            return groups;
         }
+
+        return [];
     }, [count])
     
     return <div>
@@ -171,12 +171,14 @@ const UserDashboard = () => {
                     </table>
                     {totalByGeos.map((group, index) => {
                         return <table key={index}>
-                            {group.map(item => {
-                                return <tr key={item.key}>
-                                    <td>Tổng số proxy <strong>{item.label}</strong> : </td>
-                                    <td>{item.count}</td>
-                                </tr>
-                            })}
+                            <tbody>
+                                {group.map(item => {
+                                    return <tr key={item.key}>
+                                        <td>Tổng số proxy <strong>{item.label}</strong> : </td>
+                                        <td>{item.count}</td>
+                                    </tr>
+                                })}
+                            </tbody>
                         </table>
                     })}
                 </div>

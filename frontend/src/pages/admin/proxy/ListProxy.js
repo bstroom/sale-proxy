@@ -231,16 +231,40 @@ const ListProxy = () => {
         </div>
         <Tabs defaultActiveKey={DEFAULT_TAB_KEY} onChange={onTabChange}>
             <TabPane tab="HTTP" key="HTTP">
-                <Table dataSource={proxyMetadata.data} columns={columns} rowKey="id" loading={!proxyMetadata.data?.length} pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total, position: ['topRight']}}  onChange={handleTableChange}/>
+                <Table 
+                    dataSource={proxyMetadata.data} 
+                    columns={columns} 
+                    rowKey="id" 
+                    loading={!proxyMetadata.data?.length} 
+                    pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total, position: ['topRight'], pageSizeOptions: ['10', '50', '100', '500', '1000']}}  
+                    onChange={handleTableChange}/>
             </TabPane>
             <TabPane tab="SOCKS4" key="SOCKS4">
-                <Table dataSource={proxyMetadata.data} columns={columns} rowKey="id" loading={!proxyMetadata.data?.length} pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total, position: ['topRight']}}  onChange={handleTableChange}/>
+                <Table 
+                    dataSource={proxyMetadata.data} 
+                    columns={columns} 
+                    rowKey="id" 
+                    loading={!proxyMetadata.data?.length} 
+                    pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total, position: ['topRight'], pageSizeOptions: ['10', '50', '100', '500', '1000']}}  
+                    onChange={handleTableChange}/>
             </TabPane>
             <TabPane tab="SOCKS5" key="SOCKS5">
-                <Table dataSource={proxyMetadata.data} columns={columns} rowKey="id" loading={!proxyMetadata.data?.length} pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total, position: ['topRight']}}  onChange={handleTableChange}/>
+                <Table 
+                    dataSource={proxyMetadata.data} 
+                    columns={columns} 
+                    rowKey="id" 
+                    loading={!proxyMetadata.data?.length} 
+                    pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total, position: ['topRight'], pageSizeOptions: ['10', '50', '100', '500', '1000']}}  
+                    onChange={handleTableChange}/>
             </TabPane>
             <TabPane tab="SSH" key="SSH">
-                <Table dataSource={proxyMetadata.data} columns={columns} rowKey="id" loading={!proxyMetadata.data?.length} pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total, position: ['topRight']}}  onChange={handleTableChange}/>
+                <Table 
+                    dataSource={proxyMetadata.data} 
+                    columns={columns} 
+                    rowKey="id" 
+                    loading={!proxyMetadata.data?.length} 
+                    pagination={{pageSize: listParams.limit, current: listParams.page, total: proxyMetadata.total, position: ['topRight'], pageSizeOptions: ['10', '50', '100', '500', '1000']}}  
+                    onChange={handleTableChange}/>
             </TabPane>
         </Tabs>
     </>;
