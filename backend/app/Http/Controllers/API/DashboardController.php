@@ -31,12 +31,14 @@ class DashboardController extends Controller
     public function index()
     {
         $totalSSH = $this->proxyRepository->count([
-            'type' => 'SSH'
+            'type' => 'SSH',
+            'status' => 'LIVE'
         ]);
         $totalHTTP = $this->proxyRepository->count([
-            'type' => 'HTTP'
+            'type' => 'HTTP',
+            'status' => 'LIVE'
         ]);
-        $totalSOCKS = $this->proxyRepository->whereIn('type', ['SOCKS5', 'SOCKS4'])->count();
+        $totalSOCKS = $this->proxyRepository->whereIn('type', ['SOCKS5', 'SOCKS4'])->where(['status' => 'LIVE'])->count();
 
         $count = [
             'total_ssh' => $totalSSH,
@@ -48,7 +50,7 @@ class DashboardController extends Controller
         $geos = $this->geoRepository->where(['is_active' => true])->get();
 
         foreach ($geos as $geo) {
-            $totalByGeo = $this->proxyRepository->count(['geo_local' => $geo['code']]);
+            $totalByGeo = $this->proxyRepository->count(['geo_local' => $geo['code'], 'status' => 'LIVE']);
             if ($totalByGeo > 0) {
                 $count['total_by_geo_local'][strtolower($geo['code'])] = [
                     'count' => $totalByGeo,
@@ -59,7 +61,7 @@ class DashboardController extends Controller
 
         $count['total_by_geo_local']['unknown'] = [
             'label' => 'Chưa xác định',
-            'count' => $this->proxyRepository->whereNull('geo_local')->orWhere(['geo_local' => 'Null'])->count()
+            'count' => $this->proxyRepository->whereNull('geo_local')->orWhere(['geo_local' => 'Null'])->where(['status' => 'LIVE'])->count()
         ];
 
         $userOrders = null;
