@@ -1,5 +1,6 @@
 body {
   font-size: 16px;
+  font-family: 'Montserrat', Helvetica, sans-serif;
 }
 
 .container {
@@ -43,7 +44,13 @@ body {
 }
 
 .ant-layout {
+  background: #ececec;
+}
+
+.ant-layout-content {
   background: #fff;
+  border-radius: 6px;
+  box-shadow: 1px 1px 3px #ccc;
 }
 
 .ant-table {
@@ -68,4 +75,23 @@ h1 {
 
 .uppercase {
   text-transform: uppercase;
+}
+
+.admin-layout {
+  display: flex;
+}
+
+.main-menu {
+  position: static;
+}
+
+.main-menu.menu-light .navigation>li.sidebar-group-active>a {
+  background: #fff !important;
+}
+
+.main-menu.menu-light .navigation>li.open:not(.menu-item-closing)>a {
+  background: #fff !important;
+}
+.main-menu .parent {
+  font-weight: bold;
 }

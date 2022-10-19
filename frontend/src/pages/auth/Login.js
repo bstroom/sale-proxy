@@ -3,9 +3,13 @@ import {Button, Form, Input} from 'antd';
 import React from "react";
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {loginAction} from "../../store/actions/authActions";
 import {usePromiseTracker} from "react-promise-tracker";
+
+import useUnAuth from '../../hooks/useUnAuth';
+import {loginAction} from "../../store/actions/authActions";
+
 const Login = () => {
+    useUnAuth()
     const dispatch = useDispatch();
     const {promiseInProgress} = usePromiseTracker();
 

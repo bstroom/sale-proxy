@@ -1,10 +1,12 @@
 import { trackPromise } from 'react-promise-tracker';
 import httpClient, {setToken} from "../../services/httpClient";
 import {TOKEN_KEY} from "../../common/contanst";
+import { endLoadingAction } from './appActions';
 
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGOUT = 'LOGOUT';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
 export const loginSuccessAction = (data) => ({
     type: LOGIN_SUCCESS,
@@ -39,9 +41,14 @@ export const registerAction = (user, callback) => async (dispatch) => {
     }
 };
 
-export const logoutAction = (user, callback) => async (dispatch) => {
+export const logoutAction = (callback) => async (dispatch) => {
     try {
-        const { data } = await trackPromise(httpClient.post(`/auth/logout`));
+        await httpClient.post(`/auth/logout`);
+        dispatch(endLoadingAction());
+
+        if (callback) {
+            callback();
+        }
     } finally {
         localStorage.removeItem(TOKEN_KEY);
         dispatch({

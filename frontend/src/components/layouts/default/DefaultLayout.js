@@ -1,12 +1,9 @@
 import Header from "../Header";
+import { Outlet } from "react-router-dom";
 
 const DefaultLayout = ({children}) => {
     return <div className="wrapper">
-        <Header />
-        <div className="main">
-            {children}
-        </div>
-        <footer className="text-center">@2022</footer>
+        <Outlet />
     </div>
 }
 

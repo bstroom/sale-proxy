@@ -68,7 +68,7 @@ const AdminDashboard = () => {
             <h2>Hoạt động gần nhất</h2>
             {orders && <div>
                 {orders.map(order => {
-                    return <div>
+                    return <div key={order.id}>
                         {order.user.first_name + ' ' + order.user.last_name}&nbsp;
                         vừa mua gói {order.order_plans[0].plan.name} vào lúc {format(new Date(order.created_at), 'yyyy/mm/dd hh:mm:ss')} &nbsp;
                         (khoảng {formatDistance(new Date(order.created_at), new Date(),  {locale: vi})} trước)

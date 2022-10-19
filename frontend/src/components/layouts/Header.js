@@ -3,20 +3,25 @@ import {useDispatch, useSelector} from "react-redux";
 import {logoutAction} from "../../store/actions/authActions";
 import {ADMIN_ROLE, USER_ROLE} from "../../common/contanst";
 import {useAuth} from "../../hooks";
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const dispatch = useDispatch();
     const auth = useSelector(state => state.auth);
     const [isAuth, role] = useAuth();
+    const navigate = useNavigate();
+
     const logout = () => {
-        dispatch(logoutAction())
+        dispatch(logoutAction(() => {
+            navigate('/auth/login');
+        }))
     }
     return <header>
         <div className="header-inner">
             <div className="header-left">
-                <Link to='/'>
+                {/* <Link to='/'>
                     <h1>1Proxy.net</h1>
-                </Link>
+                </Link> */}
             </div>
             <div className="header-right">
                 <nav>
@@ -26,7 +31,7 @@ const Header = () => {
                 {
                     !auth.isAuth && <div className="auth">
                         <span className="login">
-                           <Link to="/login">Đăng nhập</Link>
+                            <Link to="/login">Đăng nhập</Link>
                         </span>
                         <span className="register">
                             <Link to="/register">Đăng ký</Link>
