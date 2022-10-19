@@ -1,7 +1,7 @@
 import { trackPromise } from 'react-promise-tracker';
 import httpClient, {setToken} from "../../services/httpClient";
 import {TOKEN_KEY} from "../../common/contanst";
-import { endLoadingAction } from './appActions';
+import { endLoadingAction, startLoadingAction } from './appActions';
 
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -24,9 +24,6 @@ export const loginAction = (credentials) => async (dispatch) => {
         }));
     } catch (err) {
         localStorage.removeItem(TOKEN_KEY);
-        dispatch({
-            type: LOGOUT
-        });
     }
 };
 
@@ -42,17 +39,16 @@ export const registerAction = (user, callback) => async (dispatch) => {
 };
 
 export const logoutAction = (callback) => async (dispatch) => {
-    try {
-        await httpClient.post(`/auth/logout`);
-        dispatch(endLoadingAction());
+    dispatch({
+        type: LOGOUT
+    })
+    
+    await httpClient.post(`/auth/logout`);
+    
+    dispatch(endLoadingAction());
 
-        if (callback) {
-            callback();
-        }
-    } finally {
-        localStorage.removeItem(TOKEN_KEY);
-        dispatch({
-            type: LOGOUT
-        });
+    localStorage.removeItem(TOKEN_KEY);
+    if (callback) {
+        callback();
     }
 };

@@ -8,7 +8,9 @@ const isDev = false;
 
 const middleware = [applyMiddleware(thunk), ...(isDev ? window.__REDUX_DEVTOOLS_EXTENSION__() : [])];
 const store = createStore(
-    (state, action) => rootReducer(action.type === LOGOUT ? undefined : state, action),
+    (state, action) => {
+        return rootReducer(action.type === LOGOUT ? undefined : state, action);
+    },
     initialState,
     window.__REDUX_DEVTOOLS_EXTENSION__
         ? compose(...middleware)
