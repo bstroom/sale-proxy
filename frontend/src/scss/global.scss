@@ -83,6 +83,8 @@ h1 {
 
 .main-menu {
   position: static;
+  min-width: 250px;
+  height: unset;
 }
 
 .main-menu.menu-light .navigation>li.sidebar-group-active>a {

@@ -149,14 +149,6 @@ const AdminLayout = ({ children }) => {
                                             </span>
                                         </Link>
                                     </li>
-                                    <li>
-                                        <Link className="d-flex align-items-center" to="/admin/proxy/import">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
-                                            <span className="menu-item text-truncate" data-i18n="Preview">
-                                                Import
-                                            </span>
-                                        </Link>
-                                    </li>
                                 </ul>
                             </li>
                             <li className="has-sub open nav-item">
@@ -242,7 +234,7 @@ const AdminLayout = ({ children }) => {
                 </div>
                 <Layout
                     style={{
-                        padding: "0 24px 24px",
+                        padding: "0 24px 0 24px",
                     }}
                 >
                     <Header />
@@ -258,7 +250,7 @@ const AdminLayout = ({ children }) => {
                     </Content>
                 </Layout>
             </div>
-            <footer>@ProxyList.Fun</footer>
+            <footer>@1Proxy.Net</footer>
             <div className="mobile">
                 <div className="mobile-inner">
                     <div className={isMenuMobileActive ? "mobile-content mobile-content__active" : "mobile-content"}>
