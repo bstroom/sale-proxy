@@ -79,12 +79,19 @@ h1 {
 
 .admin-layout {
   display: flex;
+  @media screen and (max-width: 678px) {
+    display: block;
+  }
 }
 
 .main-menu {
   position: static;
   min-width: 250px;
   height: unset;
+  display: block;
+  @media screen and (max-width: 678px) {
+    display: none;
+  }
 }
 
 .main-menu.menu-light .navigation>li.sidebar-group-active>a {

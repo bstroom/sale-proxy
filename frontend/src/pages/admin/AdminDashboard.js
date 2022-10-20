@@ -119,7 +119,7 @@ const AdminDashboard = () => {
                         {totalByGeos.data.map((n, i) => {
                             return <div className="name-item">
                                 <div><span className="label" style={{borderColor: totalByGeos.colors[i]}}>{totalByGeos.labels[i]}</span></div>
-                                {n}
+                                <div className="value"><span>{n}</span></div>
                             </div>
                         })}
                     </div>

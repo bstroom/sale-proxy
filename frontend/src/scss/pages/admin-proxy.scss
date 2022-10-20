@@ -1,6 +1,8 @@
 .proxy-list-header {
   display: flex;
-  
+  @media screen and (max-width: 678px) {
+    display: none;
+  }
   .search-area {
     margin-left: 1rem;
   }
