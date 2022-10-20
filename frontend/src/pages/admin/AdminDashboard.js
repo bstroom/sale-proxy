@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react";
 import { getDashboardAction } from "../../store/actions/dashboardActions";
 import { Skeleton, Tag } from "antd";
 import { format, formatDistance } from "date-fns";
-import { currencyFormat, randomRgba } from "../../common/helpers";
+import { currencyFormat, randomHex } from "../../common/helpers";
 import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { CategoryScale, registerables } from "chart.js";
@@ -21,14 +21,18 @@ const AdminDashboard = () => {
             colors: [],
         };
         if (count) {
-            const groups = Object.entries(count?.total_by_geo_local).reduce((acc, [key, item]) => {
+            const groups = Object.entries(count.total_by_geo_local).reduce((acc, [key, item]) => {
                 return {
                     labels: [...acc.labels, item.label],
                     data: [...acc.data, item.count],
-                    colors: [...acc.colors, randomRgba()],
+                    colors: [...acc.colors, randomHex()],
                 };
             }, init);
-            return groups;
+            return {
+                data: [count.total_http, count.total_socks, count.total_ssh, ...groups.data],
+                labels: ['HTTP', 'SOCKS', 'SSH', ...groups.labels],
+                colors: [randomHex(), randomHex(), randomHex(), ...groups.colors],
+            };
         }
 
         return init;
@@ -114,7 +118,7 @@ const AdminDashboard = () => {
                     <div className="name-list">
                         {totalByGeos.data.map((n, i) => {
                             return <div className="name-item">
-                                <div><strong>{totalByGeos.labels[i]}</strong></div>
+                                <div><span className="label" style={{borderColor: totalByGeos.colors[i]}}>{totalByGeos.labels[i]}</span></div>
                                 {n}
                             </div>
                         })}

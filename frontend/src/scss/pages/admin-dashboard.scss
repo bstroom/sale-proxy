@@ -85,9 +85,19 @@
     padding: .75rem .6rem;
     .name-item {
       border: 1px solid #ececec;
-      padding: .75rem 1rem;
+      padding: .75rem 1.2rem;
       border-radius: 4px;
-      box-shadow: 1px 1px 1px #efefef;
+      box-shadow: 0.5px 0.5px 0.3px #efefef;
+
+      &:hover {
+        transform: translateY(-5px);
+        transition: all 0.5s ease;
+      }
+
+      .label {
+        font-weight: 500;
+        border-bottom: 2px solid #efefef;
+      }
     }
   }
 }
